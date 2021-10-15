@@ -2,26 +2,35 @@
   <div id="app">
     <div>appkey: <input v-model="appkey" /></div>
     <div>usertoken: <input v-model="usertoken" /></div>
-    <p>YmSBbNsfRwwI5PzVHL3RtGIXiK7UziXWPic5kDh9BJY=@0fv3.cn.rongnav.com;0fv3.cn.rongcfg.com</p>
+    <p>
+      YmSBbNsfRwwI5PzVHL3RtGIXiK7UziXWPic5kDh9BJY=@0fv3.cn.rongnav.com;0fv3.cn.rongcfg.com
+    </p>
     <div>
       <button v-on:click="start">开始初始化</button>
     </div>
-    <div>
-      roomid: <input v-model="roomid" />
-    </div>
-    
+    <div>roomid: <input v-model="roomid" /></div>
+    <div>roomname: <input v-model="roomname" /></div>
     <div class="block">
       <div>主播操作</div>
-     
+
       <button v-on:click="createAndJoinRoom">createAndJoinRoom</button>
-       <button v-on:click="leaveRoom">leaveRoom</button>
+      <button v-on:click="leaveRoom">leaveRoom</button>
     </div>
     <div class="block">
       <div>观众操作</div>
-     
+
       <button v-on:click="joinRoom">joinRoom</button>
       <button v-on:click="leaveRoom">leaveRoom</button>
-      
+    </div>
+    <div>
+      麦位信息
+      <div v-for="(item, index) in seatInfoList" :key="index">
+        | 当前状态:{{ item.status }} | 是否静音:{{ item.mute }} | 用户id:{{
+          item.userId
+        }}
+        | 自定义:{{ item.extra }}
+         
+      </div>
     </div>
   </div>
 </template>
@@ -37,6 +46,8 @@ export default {
       usertoken:
         "uWgFAOO3fH4CcOmUAuGjAWRn2CMgdJTbX5Cxn5ZSuW8=@0fv3.cn.rongnav.com;0fv3.cn.rongcfg.com",
       roomid: "",
+      roomname: "",
+      seatInfoList: []
     };
   },
   mounted() {
@@ -53,16 +64,38 @@ export default {
       sdk.on("ready", () => {
         console.log("sdk初始化完成");
       });
+      sdk.on("update", () => {
+        console.log("sdk初始化完成");
+      });
+      sdk.on("onSeatInfoUpdate",()=>{
+        this._data.seatInfoList = sdk.seatInfoList;
+      })
+      sdk.on("onRoomInfoUpdate",()=>{
+        console.log('RoomInfo:' , sdk.roomInfo);
+      })
+      onSeatInfoUpdate
+      onRoomInfoUpdate
     },
-    createAndJoinRoom(){
-      sdk.createAndJoinRoom(this._data.roomid)
+    createAndJoinRoom() {
+      if (this._data.roomid == "") {
+        alert("房间id不能为空");
+        return;
+      }
+      if (this._data.roomname == "") {
+        //如果房间名称为空则设置为与id相同  roomname 是可选参数
+        this._data.roomname = this._data.roomid;
+      }
+      sdk.createAndJoinRoom({
+        roomid: this._data.roomid,
+        roomname: this._data.roomname,
+      });
     },
-    joinRoom(){
-      sdk.joinRoom(this._data.roomid)
+    joinRoom() {
+      sdk.joinRoom(this._data.roomid);
     },
-    leaveRoom(){
-      sdk.leaveRoom(this._data.roomid)
-    }
+    leaveRoom() {
+      sdk.leaveRoom(this._data.roomid);
+    },
   },
 };
 </script>
