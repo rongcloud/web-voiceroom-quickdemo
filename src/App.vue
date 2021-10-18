@@ -7,6 +7,7 @@
     </p>
     <div>
       <button v-on:click="start">开始初始化</button>
+      <button v-on:click="connect">使用token连接</button>
     </div>
     <div>roomid: <input v-model="roomid" /></div>
     <div>roomname: <input v-model="roomname" /></div>
@@ -29,15 +30,22 @@
           item.userId
         }}
         | 自定义:{{ item.extra }}
-         
+        
       </div>
+    </div>
+    <div>
+      rtc用户操作
+        <div>麦位序号: <input v-model="seatNum" /></div>
+        <div>目标用户id: <input v-model="userId" /></div>
+        <button v-on:click="enterSeat">上麦</button>
+        <button v-on:click="leaveSeat">下麦</button>
     </div>
   </div>
 </template>
 
 <script>
 import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
-
+//import sdk from 'rcvoiceroomlib'
 export default {
   name: "App",
   data: () => {
@@ -47,7 +55,9 @@ export default {
         "uWgFAOO3fH4CcOmUAuGjAWRn2CMgdJTbX5Cxn5ZSuW8=@0fv3.cn.rongnav.com;0fv3.cn.rongcfg.com",
       roomid: "",
       roomname: "",
-      seatInfoList: []
+      seatInfoList: [],
+      seatNum:'',
+      userId:''
     };
   },
   mounted() {
@@ -56,11 +66,7 @@ export default {
   },
   methods: {
     start: function () {
-      let option = {
-        appkey: this._data.appkey,
-        usertoken: this._data.usertoken,
-      };
-      sdk.init(option);
+      sdk.init(this._data.appkey);
       sdk.on("ready", () => {
         console.log("sdk初始化完成");
       });
@@ -73,8 +79,9 @@ export default {
       sdk.on("onRoomInfoUpdate",()=>{
         console.log('RoomInfo:' , sdk.roomInfo);
       })
-      onSeatInfoUpdate
-      onRoomInfoUpdate
+    },
+    connect(){
+      sdk.connect(this._data.usertoken);
     },
     createAndJoinRoom() {
       if (this._data.roomid == "") {
@@ -86,8 +93,8 @@ export default {
         this._data.roomname = this._data.roomid;
       }
       sdk.createAndJoinRoom({
-        roomid: this._data.roomid,
-        roomname: this._data.roomname,
+        roomId: this._data.roomid,
+        roomName: this._data.roomname,
       });
     },
     joinRoom() {
@@ -96,6 +103,12 @@ export default {
     leaveRoom() {
       sdk.leaveRoom(this._data.roomid);
     },
+    enterSeat() {
+      sdk.rtc.enterSeat();
+    },
+    leaveSeat(){
+      sdk.rtc.leaveSeat();
+    }
   },
 };
 </script>
