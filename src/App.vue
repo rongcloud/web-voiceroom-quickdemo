@@ -107,8 +107,7 @@
         <input v-model="enterseatIndex" />
       </div>
       <div>
-        <button @click="leaveSeat(leaveseatIndex)">用户下麦</button>麦位序号:
-        <input v-model="leaveseatIndex" />
+        <button @click="leaveSeat(leaveseatIndex)">用户下麦</button>
       </div>
       <div>
         <button @click="switchSeatTo(switchseatIndex)">用户跳麦</button
@@ -118,7 +117,9 @@
 
       <div>
         <button @click="getRequestSeatUserIds">申请上麦集合</button>
-        <div>{{ this.RequestSeatUserIds }}</div>
+        <div v-for="(item, i) in this.RequestSeatUserIds" :key="i">
+          {{ item }}
+        </div>
       </div>
       <div>
         <button @click="updateSeatInfo(updateSeatIndex, updateExtra)">
@@ -132,17 +133,19 @@
       <button @click="cancelRequestSeat">取消排麦</button><br />
       <div>
         <button @click="getLatestSeatInfo">最新麦位信息</button><br />
-        {{ this.LatestSeatInfo }}
+        <div v-for="(item, i) in this.LatestSeatInfo" :key="i">
+          <span>{{ i }}号麦位</span>{{ item }}
+        </div>
       </div>
     </div>
     <div>
-      麦位信息
-      <div v-for="(item, index) in seatInfoList" :key="index">
+      <!-- 麦位信息 -->
+      <!-- <div v-for="(item, index) in seatInfoList" :key="index">
         | 当前状态:{{ item.status }} | 是否静音:{{ item.mute }} | 用户id:{{
           item.userId
         }}
         | 自定义:{{ item.extra }}
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -160,7 +163,7 @@ export default {
       appkey: "pvxdm17jpw7ar",
       usertoken:
         "wB2pIEjKZhIpPhN9p7Q/0W1AOiPCF2gmNkBLANBrVzlzbbd3zFCcXts5peb8z1U4K8Yv5vmbg1XfnfI4frh+OQ==@4d1h.cn.rongnav.com;4d1h.cn.rongcfg.com",
-      roomid: "fEOC3-Y1SVkl5jt72Ix_Mo",
+      roomid: "SRiqTORVQvEjVV7HOnje0E",
       //房主
       kickUserId: null,
       pickUserId: null,
@@ -214,8 +217,6 @@ export default {
       sdk.on("onRoomInfoUpdate", () => {
         console.log("RoomInfo:", sdk.roomInfo);
       });
-      // onSeatInfoUpdate
-      // onRoomInfoUpdate
     },
     createAndJoinRoom() {
       if (this._data.roomid == "") {
@@ -270,7 +271,7 @@ export default {
       if (lockSeatIndex == null) {
         alert("麦位序号");
       } else {
-        sdk.muteSeat(lockSeatIndex, isLocked);
+        sdk.lockSeat(lockSeatIndex, isLocked);
       }
     },
     setRoomInfo: function (
@@ -294,11 +295,10 @@ export default {
       }
     },
     muteOtherSeats: function (muteOtherValue) {
-      console.log(muteOtherValue);
-      // sdk.muteOtherSeats(muteOtherValue);
+      sdk.muteOtherSeats(muteOtherValue);
     },
     lockOtherSeats: function (lockOtherValue) {
-      sdk.muteOtherSeats(lockOtherValue);
+      sdk.lockOtherSeats(lockOtherValue);
     },
     acceptRequestSeat: function (acceptRequestSeatId) {
       if (acceptRequestSeatId == null) {
@@ -319,15 +319,11 @@ export default {
       if (enterseatIndex == null) {
         alert("请输入麦位序号");
       } else {
-        sdk.enterSeat(enterseatIndex);
+        sdk.enterSeat(Number(enterseatIndex));
       }
     },
-    leaveSeat: function (leaveseatIndex) {
-      if (leaveseatIndex == null) {
-        alert("请输入麦位序号");
-      } else {
-        sdk.leaveSeat(leaveseatIndex);
-      }
+    leaveSeat: function () {
+      sdk.leaveSeat();
     },
     switchSeatTo: function (switchseatIndex) {
       if (switchseatIndex == null) {
@@ -339,8 +335,8 @@ export default {
     disConnect: function () {
       sdk.disConnect();
     },
-    getRequestSeatUserIds: function () {
-      this.RequestSeatUserIds = sdk.getRequestSeatUserIds();
+    getRequestSeatUserIds: async function () {
+      this.RequestSeatUserIds = await sdk.getRequestSeatUserIds();
     },
     updateSeatInfo: function (updateSeatIndex, updateExtra) {
       if (updateSeatIndex == null) {
@@ -350,14 +346,13 @@ export default {
       }
     },
     requestSeat: function () {
-      console.log(123);
       sdk.requestSeat();
     },
     cancelRequestSeat: function () {
       sdk.cancelRequestSeat();
     },
-    getLatestSeatInfo: function () {
-      this.LatestSeatInfo = sdk.getLatestSeatInfo();
+    getLatestSeatInfo: async function () {
+      this.LatestSeatInfo = await sdk.getLatestSeatInfo();
     },
   },
 };
