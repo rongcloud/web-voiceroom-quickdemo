@@ -114,7 +114,6 @@
         >麦位序号:
         <input v-model="switchseatIndex" />
       </div>
-
       <div>
         <button @click="getRequestSeatUserIds">申请上麦集合</button>
         <div v-for="(item, i) in this.RequestSeatUserIds" :key="i">
@@ -131,6 +130,8 @@
       <button @click="disConnect">主动断开连接</button>
       <button @click="requestSeat">请求排麦</button>
       <button @click="cancelRequestSeat">取消排麦</button><br />
+      <button @click="sendMessage">发送消息</button><br />
+
       <div>
         <button @click="getLatestSeatInfo">最新麦位信息</button><br />
         <div v-for="(item, i) in this.LatestSeatInfo" :key="i">
@@ -353,6 +354,17 @@ export default {
     },
     getLatestSeatInfo: async function () {
       this.LatestSeatInfo = await sdk.getLatestSeatInfo();
+    },
+    sendMessage: function () {
+      // const message = {
+      //   messageType: "RC:VRLRefreshMsg", // 'RC:TxtMsg'
+      //   content: { name: "RCUserOnSeatSpeakingKey_0", content: 9 },
+      // };
+      //  sdk.sendMessage(message);
+      const name = "RCAudienceLeaveRoom",
+        content = "265e3bf0-fafe-40f0-9521-63929501db78";
+
+      sdk.notifyVoiceRoom(name, content);
     },
   },
 };
