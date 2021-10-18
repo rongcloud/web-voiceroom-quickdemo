@@ -365,15 +365,15 @@ export default {
       this.seatInfoList = await sdk.getLatestSeatInfo();
     },
     sendMessage: function () {
-      // const message = {
-      //   messageType: "RC:VRLRefreshMsg", // 'RC:TxtMsg'
-      //   content: { name: "RCUserOnSeatSpeakingKey_0", content: 9 },
-      // };
-      //  sdk.sendMessage(message);
-      const name = "RCAudienceLeaveRoom",
-        content = "265e3bf0-fafe-40f0-9521-63929501db78";
+      const message = {
+        messageType: "RC:VRLRefreshMsg", // 'RC:TxtMsg'
+        content: { name: "RCUserOnSeatSpeakingKey_0", content: 9 },
+      };
+       sdk.sendMessage(message);
+      // const name = "RCAudienceLeaveRoom",
+      //   content = "265e3bf0-fafe-40f0-9521-63929501db78";
 
-      sdk.notifyVoiceRoom(name, content);
+      // sdk.notifyVoiceRoom(name, content);
     },
   },
 };
