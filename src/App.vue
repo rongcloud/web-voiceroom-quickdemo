@@ -9,10 +9,25 @@
       <button v-on:click="start">开始初始化</button>
       <button v-on:click="connect">使用token连接</button>
     </div>
-    <div>roomid: <input v-model="roomid" class="inputID" /></div>
-    <div>roomname: <input v-model="roomname" class="inputID" /></div>
+    <div>
+      roomid:
+      <input
+        v-model="roomid"
+        title="可依据开发者工具创建房间，生成房间id、房间名称，作为观众方加入，也可作为房主主动创建并加入一个自定义id、名称的房间"
+        placeholder="输入roomid"
+        class="inputID"
+      />
+    </div>
+    <div>
+      roomname:
+      <input
+        v-model="roomname"
+        placeholder="输入roomname，非必填"
+        class="inputID"
+      />
+    </div>
     <div class="block">
-      <div>模拟主播操作</div>
+      <div>模拟房主操作</div>
       <button @click="createAndJoinRoom" title="创建并加入新创建房间中">
         createAndJoinRoom
       </button>
@@ -220,8 +235,8 @@
 </template>
 
 <script>
-import sdk from "../../RCVoiceRoomLib-Web/dist/main.js";
-//import sdk from 'rcvoiceroomlib'
+//import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
+import sdk from "rcvoiceroomlib-v1";
 export default {
   name: "App",
   data: () => {
@@ -425,7 +440,7 @@ export default {
     sendMessage: function () {
       const message = {
         messageType: "RC:VRLRefreshMsg", // 'RC:TxtMsg'
-        content: { name: "RCUserOnSeatSpeakingKey_0", content: 9 },
+        content: { name: "RCUserOnSeatSpeakingKey_0", content: 1 },
       };
       sdk.sendMessage(message);
       // const name = "RCAudienceLeaveRoom",
