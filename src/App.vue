@@ -160,8 +160,8 @@
 </template>
 
 <script>
-//import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
-import sdk from 'rcvoiceroomlib-v1'
+import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
+//import sdk from 'rcvoiceroomlib-v1'
 export default {
   name: "App",
   data: () => {
