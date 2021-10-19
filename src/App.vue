@@ -160,8 +160,8 @@
 </template>
 
 <script>
-import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
-//import sdk from 'rcvoiceroomlib'
+//import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
+import sdk from 'rcvoiceroomlib-v1'
 export default {
   name: "App",
   data: () => {
@@ -367,7 +367,7 @@ export default {
     sendMessage: function () {
       const message = {
         messageType: "RC:VRLRefreshMsg", // 'RC:TxtMsg'
-        content: { name: "RCUserOnSeatSpeakingKey_0", content: 9 },
+        content: { name: "RCUserOnSeatSpeakingKey_0", content: 1 },
       };
        sdk.sendMessage(message);
       // const name = "RCAudienceLeaveRoom",
