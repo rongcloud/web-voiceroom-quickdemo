@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div>appkey: <input v-model="appkey" /></div>
-    <div>usertoken: <input v-model="usertoken" /></div>
+    <div>usertoken: <input v-model="usertoken" style="width: 800px" /></div>
     <p>
       YmSBbNsfRwwI5PzVHL3RtGIXiK7UziXWPic5kDh9BJY=@0fv3.cn.rongnav.com;0fv3.cn.rongcfg.com
     </p>
@@ -9,38 +9,75 @@
       <button v-on:click="start">开始初始化</button>
       <button v-on:click="connect">使用token连接</button>
     </div>
-    <div>roomid: <input v-model="roomid" /></div>
-    <div>roomname: <input v-model="roomname" /></div>
+    <div>
+      roomid:
+      <input
+        v-model="roomid"
+        title="可依据开发者工具创建房间，生成房间id、房间名称，作为观众方加入，也可作为房主主动创建并加入一个自定义id、名称的房间"
+        placeholder="输入roomid"
+        class="inputID"
+      />
+    </div>
+    <div>
+      roomname:
+      <input
+        v-model="roomname"
+        placeholder="输入roomname，非必填"
+        class="inputID"
+      />
+    </div>
     <div class="block">
-      <div>主播操作</div>
-      <button @click="createAndJoinRoom">createAndJoinRoom</button>
+      <div>模拟房主操作</div>
+      <button @click="createAndJoinRoom" title="创建并加入新创建房间中">
+        createAndJoinRoom
+      </button>
       <button @click="leaveRoom">leaveRoom</button><br />
       <div>
-        <button @click="kickUserFromSeat(kickUserId)">将指定麦位下麦</button
+        <button
+          title="将一个指定并已经在麦上的用户踢下麦"
+          @click="kickUserFromSeat(kickUserId)"
+        >
+          指定用户下麦</button
         >用户id:
         <input v-model="kickUserId" />
       </div>
       <div>
-        <button @click="pickUserToSeat(pickUserId)">抱用户上麦</button>用户id:
+        <button
+          title="发送一个邀请指定用户上麦的消息"
+          @click="pickUserToSeat(pickUserId)"
+        >
+          抱用户上麦</button
+        >用户id:
         <input v-model="pickUserId" />
       </div>
       <div>
-        <button @click="kickUserFromRoom(kickUserRoomId)">将用户踢出房间</button
+        <button
+          title="将一个已存在房间中的用户踢出房间"
+          @click="kickUserFromRoom(kickUserRoomId)"
+        >
+          踢出房间</button
         >用户id:
         <input v-model="kickUserRoomId" />
       </div>
       <div>
-        <button @click="muteSeat(muteSeatIndex, ismute)">将某个麦位静音</button
-        >麦位序号: <input v-model="muteSeatIndex" /><br />
+        <button
+          title="控制指定麦位的静音与否"
+          @click="muteSeat(muteSeatIndex, ismute)"
+        >
+          单麦静音</button
+        >麦位序号: <input v-model="muteSeatIndex" class="inputOther" />
         是否静音:
         <input type="checkbox" v-model="ismute" id="ismute" />
         <!-- <input v-model="ismute" /> -->
       </div>
       <div>
-        <button @click="lockSeat(lockSeatIndex, isLocked)">
-          将某个麦位锁定</button
-        >麦位序号: <input v-model="lockSeatIndex" /><br />
-        是否锁麦位:
+        <button
+          title="控制指定麦位的锁定与否"
+          @click="lockSeat(lockSeatIndex, isLocked)"
+        >
+          单麦锁定</button
+        >麦位序号: <input v-model="lockSeatIndex" class="inputOther" />
+        是否锁麦:
         <input v-model="isLocked" type="checkbox" id="isLocked" />
       </div>
       <div>
@@ -54,11 +91,11 @@
               isFreeEnterSeatValue
             )
           "
+          title="可以设置房间信息,包括房间设置几坐，自由上麦/申请上麦，全麦锁座/解锁全座(不操作座位)，全麦静麦/解锁全麦(不操作座位)，房间名称等操作"
         >
           设置房间信息</button
-        >座位: <input v-model="seatCountValue" /><br />
-        自由/申请上麦:
-        <input
+        >座位: <input v-model="seatCountValue" class="inputOther" /><br />
+        上麦自由/申请：<input
           v-model="isFreeEnterSeatValue"
           type="checkbox"
           id="isFreeEnterSeatValue"
@@ -73,73 +110,118 @@
           v-model="isMuteAll"
           id="isMuteAll"
         /><br />
-        全麦操作roomName：<input v-model="roomName" />
+        房间名称<input v-model="roomName" />
       </div>
       <div>
-        <button @click="muteOtherSeats(muteOtherValue)">全麦静音/开麦</button
+        <button
+          title="全麦静麦/解锁全麦(操作0号座位之外所有座位)"
+          @click="muteOtherSeats(muteOtherValue)"
+        >
+          全麦静音/开麦</button
         >是否静音:
         <input type="checkbox" v-model="muteOtherValue" id="muteOtherValue" />
       </div>
       <div>
-        <button @click="lockOtherSeats(lockOtherValue)">全麦锁坐/开坐</button
+        <button
+          title="全麦锁座/解锁全座(操作0号座位和有人座位之外所有座位)"
+          @click="lockOtherSeats(lockOtherValue)"
+        >
+          全麦锁坐/开坐</button
         >是否锁麦:
         <input type="checkbox" v-model="lockOtherValue" id="lockOtherValue" />
       </div>
       <div>
-        <button @click="acceptRequestSeat(acceptRequestSeatId)">
-          同意用户排麦请求</button
+        <button
+          title="同意指定id用户排麦请求"
+          @click="acceptRequestSeat(acceptRequestSeatId)"
+        >
+          同意排麦请求</button
         >用户id:
         <input v-model="acceptRequestSeatId" />
       </div>
       <div>
-        <button @click="rejectRequestSeat(rejectRequestSeatId)">
-          拒绝用户排麦请求</button
+        <button
+          title="拒绝指定id用户排麦请求"
+          @click="rejectRequestSeat(rejectRequestSeatId)"
+        >
+          拒绝排麦请求</button
         >用户id:
         <input v-model="rejectRequestSeatId" />
       </div>
     </div>
     <div class="block">
-      <div>观众操作</div>
+      <div>模拟观众操作</div>
       <button @click="joinRoom">joinRoom</button>
       <button @click="leaveRoom">leaveRoom</button>
 
       <div>
-        <button @click="enterSeat(enterseatIndex)">用户上麦</button>麦位序号:
-        <input v-model="enterseatIndex" />
+        <button title="用户主动发起上麦操作" @click="enterSeat(enterseatIndex)">
+          用户上麦</button
+        >麦位序号:
+        <input v-model="enterseatIndex" class="inputOther" />
       </div>
       <div>
-        <button @click="leaveSeat(leaveseatIndex)">用户下麦</button>
+        <button title="用户主动发起下麦操作" @click="leaveSeat(leaveseatIndex)">
+          用户下麦
+        </button>
       </div>
       <div>
-        <button @click="switchSeatTo(switchseatIndex)">用户跳麦</button
+        <button
+          title="用户主动发起跳麦操作"
+          @click="switchSeatTo(switchseatIndex)"
+        >
+          用户跳麦</button
         >麦位序号:
         <input v-model="switchseatIndex" />
       </div>
       <div>
-        <button @click="getRequestSeatUserIds">申请上麦集合</button>
         <div v-for="(item, i) in this.RequestSeatUserIds" :key="i">
           {{ item }}
         </div>
       </div>
       <div>
-        <button @click="updateSeatInfo(updateSeatIndex, updateExtra)">
+        <button
+          title="更新指定麦位的extra字段"
+          @click="updateSeatInfo(updateSeatIndex, updateExtra)"
+        >
           更新extra字段</button
         >麦位序号: <input v-model="updateSeatIndex" /><br />extra:<input
           v-model="updateExtra"
         />
       </div>
-      <button @click="disConnect">主动断开连接</button>
-      <button @click="requestSeat">请求排麦</button>
-      <button @click="cancelRequestSeat">取消排麦</button><br />
-      <button @click="sendMessage">发送消息</button><br />
 
+      <!-- <button @click="disConnect">主动断开连接</button><br /> -->
+      <button title="用户主动发起请求排麦" @click="requestSeat">请求排麦</button
+      ><br />
+      <button title="用户主动发起取消排麦" @click="cancelRequestSeat">
+        取消排麦</button
+      ><br />
+      <button title="模拟发送消息动作" @click="sendMessage">发送消息</button
+      ><br />
+      <button
+        title="查询并展示已发起申请上麦的ID集合"
+        @click="getRequestSeatUserIds"
+      >
+        申请上麦集合</button
+      ><br />
       <div>
-        <button @click="getLatestSeatInfo">最新麦位信息</button><br />
+        <button title="查询并展示最新麦位信息集合" @click="getLatestSeatInfo">
+          最新麦位信息</button
+        ><br />
         <div v-for="(item, i) in this.seatInfoList" :key="i">
           <span>{{ i }}号麦位</span>{{ item }}
         </div>
       </div>
+      <br />
+      <div>
+        rtc用户操作
+        <div>麦位序号: <input v-model="seatNum" /></div>
+        <div>目标用户id: <input v-model="userId" /></div>
+        <button v-on:click="enterSeat">上麦</button>
+        <button v-on:click="leaveSeat">下麦</button>
+      </div>
     </div>
+
     <div>
       <!-- 麦位信息 -->
       <!-- <div v-for="(item, index) in seatInfoList" :key="index">
@@ -149,29 +231,22 @@
         | 自定义:{{ item.extra }}
       </div> -->
     </div>
-    <div>
-      rtc用户操作
-        <div>麦位序号: <input v-model="seatNum" /></div>
-        <div>目标用户id: <input v-model="userId" /></div>
-        <button v-on:click="enterSeat">上麦</button>
-        <button v-on:click="leaveSeat">下麦</button>
-    </div>
   </div>
 </template>
 
 <script>
-import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
-//import sdk from 'rcvoiceroomlib-v1'
+//import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
+import sdk from "rcvoiceroomlib-v1";
 export default {
   name: "App",
   data: () => {
     return {
-      appkey: "25wehl3u21chw",
-      usertoken:
-        "uWgFAOO3fH4CcOmUAuGjAWRn2CMgdJTbX5Cxn5ZSuW8=@0fv3.cn.rongnav.com;0fv3.cn.rongcfg.com",
-      // appkey: "pvxdm17jpw7ar",
+      // appkey: "25wehl3u21chw",
       // usertoken:
-      //   "wB2pIEjKZhIpPhN9p7Q/0W1AOiPCF2gmNkBLANBrVzlzbbd3zFCcXts5peb8z1U4K8Yv5vmbg1XfnfI4frh+OQ==@4d1h.cn.rongnav.com;4d1h.cn.rongcfg.com",
+      //   "uWgFAOO3fH4CcOmUAuGjAWRn2CMgdJTbX5Cxn5ZSuW8=@0fv3.cn.rongnav.com;0fv3.cn.rongcfg.com",
+      appkey: "pvxdm17jpw7ar",
+      usertoken:
+        "wB2pIEjKZhIpPhN9p7Q/0W1AOiPCF2gmNkBLANBrVzlzbbd3zFCcXts5peb8z1U4K8Yv5vmbg1XfnfI4frh+OQ==@4d1h.cn.rongnav.com;4d1h.cn.rongcfg.com",
       roomid: "SRiqTORVQvEjVV7HOnje0E",
       //房主
       kickUserId: null,
@@ -200,9 +275,7 @@ export default {
       userId: "",
       roomname: "",
       seatInfoList: [],
-      seatNum:'',
-    
-     
+      seatNum: "",
     };
   },
   mounted() {
@@ -220,12 +293,12 @@ export default {
       });
       sdk.on("onSeatInfoUpdate", () => {
         this._data.seatInfoList = sdk.seatInfoList;
-      })
-      sdk.on("onRoomInfoUpdate",()=>{
-        console.log('RoomInfo:' , sdk.roomInfo);
-      })
+      });
+      sdk.on("onRoomInfoUpdate", () => {
+        console.log("RoomInfo:", sdk.roomInfo);
+      });
     },
-    connect(){
+    connect() {
       sdk.connect(this._data.usertoken);
     },
     createAndJoinRoom() {
@@ -369,7 +442,7 @@ export default {
         messageType: "RC:VRLRefreshMsg", // 'RC:TxtMsg'
         content: { name: "RCUserOnSeatSpeakingKey_0", content: 1 },
       };
-       sdk.sendMessage(message);
+      sdk.sendMessage(message);
       // const name = "RCAudienceLeaveRoom",
       //   content = "265e3bf0-fafe-40f0-9521-63929501db78";
 
@@ -388,8 +461,24 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+/* .title {
+  position: absolute;
+  left: 30%;
+} */
 .block {
-  width: 50%;
+  width: 30%;
   float: left;
+  text-align: left;
+  margin-left: 20%;
+}
+.inputID {
+  width: 300px;
+}
+.inputOther {
+  width: 50px;
+}
+.blockTitle {
+  float: left;
+  text-align: left;
 }
 </style>
