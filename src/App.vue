@@ -235,7 +235,7 @@
 </template>
 
 <script>
-//import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
+import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
 import sdk from "rcvoiceroomlib-v1"; 
 export default {
   name: "App",
@@ -381,9 +381,12 @@ export default {
         roomName: roomName,
         seatCount: seatCountValue, //麦位数量
       };
+      
       if (seatCountValue == null) {
         alert("麦位序号");
       } else {
+        console.log(roominfo);
+        
         sdk.setRoomInfo(roominfo);
       }
     },
