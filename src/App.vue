@@ -223,20 +223,20 @@
     </div>
 
     <div>
-      <!-- 麦位信息 -->
-      <!-- <div v-for="(item, index) in seatInfoList" :key="index">
+      麦位信息 
+       <div v-for="(item, index) in seatInfoList" :key="index">
         | 当前状态:{{ item.status }} | 是否静音:{{ item.mute }} | 用户id:{{
           item.userId
         }}
         | 自定义:{{ item.extra }}
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 //import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
-import sdk from "rcvoiceroomlib-v1";
+import sdk from "rcvoiceroomlib-v1"; 
 export default {
   name: "App",
   data: () => {
@@ -282,6 +282,14 @@ export default {
     window.a = sdk;
     console.log("----------------");
   },
+  watch:{
+      seatInfoList:{//深度监听，可监听到对象、数组的变化
+          handler(val, oldVal){
+              console.log("b.c: "+val, oldVal);
+          },
+          deep:true //true 深度监听
+      }
+  },
   methods: {
     start: function () {
       sdk.init(this._data.appkey);
@@ -293,6 +301,7 @@ export default {
       });
       sdk.on("onSeatInfoUpdate", () => {
         this._data.seatInfoList = sdk.seatInfoList;
+        this.$forceUpdate()
       });
       sdk.on("onRoomInfoUpdate", () => {
         console.log("RoomInfo:", sdk.roomInfo);
@@ -314,6 +323,7 @@ export default {
         roomId: this._data.roomid,
         roomName: this._data.roomname,
       });
+      //sdk.onec("joinroom")
     },
     joinRoom() {
       sdk.joinRoom(this._data.roomid);
