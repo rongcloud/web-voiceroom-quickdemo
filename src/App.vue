@@ -445,7 +445,10 @@ export default {
       sdk.cancelRequestSeat();
     },
     getLatestSeatInfo: async function () {
-      this.seatInfoList = await sdk.getLatestSeatInfo();
+      //this.seatInfoList = await sdk.getLatestSeatInfo();
+      this.seatInfoList = sdk.seatInfoList
+      this.$forceUpdate();
+      console.log("强行刷新",sdk.seatInfoList);
     },
     sendMessage: function () {
       const message = {
