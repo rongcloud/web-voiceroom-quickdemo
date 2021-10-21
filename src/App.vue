@@ -235,8 +235,8 @@
 </template>
 
 <script>
-import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
-//import sdk from "rcvoiceroomlib-v1"; 
+//import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
+import sdk from "rcvoiceroomlib-v1"; 
 export default {
   name: "App",
   data: () => {
@@ -246,8 +246,8 @@ export default {
       //   "uWgFAOO3fH4CcOmUAuGjAWRn2CMgdJTbX5Cxn5ZSuW8=@0fv3.cn.rongnav.com;0fv3.cn.rongcfg.com",
       appkey: "pvxdm17jpw7ar",
       usertoken:
-        "wB2pIEjKZhIpPhN9p7Q/0W1AOiPCF2gmNkBLANBrVzlzbbd3zFCcXts5peb8z1U4K8Yv5vmbg1XfnfI4frh+OQ==@4d1h.cn.rongnav.com;4d1h.cn.rongcfg.com",
-      roomid: "SRiqTORVQvEjVV7HOnje0E",
+        "dJHlYAI0iZXYwg3eA2qr71PLrtzG3RtcdGqDfPiZBqSIa660hwvkMds5peb8z1U4NxwKhS40Bvft/3I7XtXazA==@4d1h.cn.rongnav.com;4d1h.cn.rongcfg.com",
+      roomid: "Q7Jv4lIYQMwpXmsJAh6qw4",
       //房主
       kickUserId: null,
       pickUserId: null,
@@ -449,9 +449,9 @@ export default {
     },
     getLatestSeatInfo: async function () {
       this.seatInfoList = await sdk.getLatestSeatInfo();
-     // this.seatInfoList = sdk.seatInfoList
-      this.$forceUpdate();
-      console.log("强行刷新",sdk.seatInfoList);
+      // this.seatInfoList = sdk.seatInfoList
+      // this.$forceUpdate();
+      // console.log("强行刷新",sdk.seatInfoList);
     },
     sendMessage: function () {
       const message = {
