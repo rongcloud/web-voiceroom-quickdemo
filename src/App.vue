@@ -3,7 +3,7 @@
     <div>appkey: <input v-model="appkey" /></div>
     <div>usertoken: <input v-model="usertoken" style="width: 800px" /></div>
     <p>
-      YmSBbNsfRwwI5PzVHL3RtGIXiK7UziXWPic5kDh9BJY=@0fv3.cn.rongnav.com;0fv3.cn.rongcfg.com
+      lRfa2J9VTfoF9BBMmpGw8t2QLXfrldGNyY21wXbbeFKscMS08fzM9ts5peb8z1U4yfTDyWlj9ukgqqP9HOUIug==@4d1h.cn.rongnav.com;4d1h.cn.rongcfg.com
     </p>
     <div>
       <button v-on:click="start">开始初始化</button>
@@ -235,8 +235,8 @@
 </template>
 
 <script>
-//import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
-import sdk from "rcvoiceroomlib-v1"; 
+import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
+//import sdk from "rcvoiceroomlib-v1"; 
 export default {
   name: "App",
   data: () => {
@@ -448,8 +448,8 @@ export default {
       sdk.cancelRequestSeat();
     },
     getLatestSeatInfo: async function () {
-      //this.seatInfoList = await sdk.getLatestSeatInfo();
-      this.seatInfoList = sdk.seatInfoList
+      this.seatInfoList = await sdk.getLatestSeatInfo();
+     // this.seatInfoList = sdk.seatInfoList
       this.$forceUpdate();
       console.log("强行刷新",sdk.seatInfoList);
     },
