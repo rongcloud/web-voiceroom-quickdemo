@@ -203,7 +203,7 @@
       ><br />
       <div>
         <button title="查询并展示最新麦位信息集合" @click="getLatestSeatInfo">
-          最新麦位信息{{seatInfoList}}</button
+          最新麦位信息</button
         ><br />
         <div v-for="(item, i) in seatInfoList" :key="i">
           <span>{{ i }}号麦位</span>{{ item }}
@@ -220,13 +220,13 @@
     </div>
 
     <div>
-      麦位信息 
-       <div v-for="(item, index) in seatInfoList" :key="index">
+    
+       <!-- <div v-for="(item, index) in seatInfoList" :key="index">
         | 当前状态:{{ item.status }} | 是否静音:{{ item.mute }} | 用户id:{{
           item.userId
         }}
         | 自定义:{{ item.extra }}
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -271,10 +271,11 @@ export default {
       RequestSeatUserIds: [],
       userId: "",
       roomname: "",
-      seatInfoList: [],
       seatNum: "",
+      seatInfoList:[]
     };
   },
+ 
   mounted() {
     window.a = sdk;
     console.log("----------------");
@@ -303,7 +304,17 @@ export default {
       });
       sdk.on("onRoomInfoUpdate", () => {
         console.log("RoomInfo:", sdk.roomInfo);
+         this.$forceUpdate()
       });
+    },
+    getLatestSeatInfo: async function () {
+      this._data.seatInfoList = sdk.seatInfoList
+      //  this.$set(this.seatInfoList,index,sdk.seatInfoList)
+      let list = await sdk.getLatestSeatInfo()
+      console.log("远端数据",list);
+      this.$forceUpdate();
+      
+      //需要执行一次强制刷新更新本地ui层展示
     },
     connect() {
       sdk.connect(this._data.usertoken);
@@ -442,14 +453,7 @@ export default {
     cancelRequestSeat: function () {
       sdk.cancelRequestSeat();
     },
-    getLatestSeatInfo: async function () {
-      this._data.seatInfoList = sdk.seatInfoList
-      let list = await sdk.getLatestSeatInfo()
-      console.log("远端数据",list);
-      this.$forceUpdate();
-      
-      //需要执行一次强制刷新更新本地ui层展示
-    },
+   
     sendMessage: function () {
       const message = {
         messageType: "RC:VRLRefreshMsg", // 'RC:TxtMsg'
