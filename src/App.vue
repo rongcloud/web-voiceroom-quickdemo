@@ -64,7 +64,7 @@
           title="控制指定麦位的静音与否"
           @click="muteSeat(muteSeatIndex, ismute)"
         >
-          单麦静音</button
+          单麦闭麦</button
         >麦位序号: <input v-model="muteSeatIndex" class="inputOther" />
         是否静音:
         <input type="checkbox" v-model="ismute" id="ismute" />
@@ -75,7 +75,7 @@
           title="控制指定麦位的锁定与否"
           @click="lockSeat(lockSeatIndex, isLocked)"
         >
-          单麦锁定</button
+          单麦锁座</button
         >麦位序号: <input v-model="lockSeatIndex" class="inputOther" />
         是否锁麦:
         <input v-model="isLocked" type="checkbox" id="isLocked" />
@@ -85,22 +85,19 @@
           @click="
             setRoomInfo(
               seatCountValue,
-              isLockAll,
-              isMuteAll,
-              roomName,
               isFreeEnterSeatValue
             )
           "
-          title="可以设置房间信息,包括房间设置几坐，自由上麦/申请上麦，全麦锁座/解锁全座(不操作座位)，全麦静麦/解锁全麦(不操作座位)，房间名称等操作"
+          title="可以设置房间信息,包括房间设置几坐，自由上麦/申请上麦操作"
         >
-          设置房间信息</button
+          设置座位数/上麦模式（自由/申请）</button
         >座位: <input v-model="seatCountValue" class="inputOther" /><br />
         上麦自由/申请：<input
           v-model="isFreeEnterSeatValue"
           type="checkbox"
           id="isFreeEnterSeatValue"
         /><br />
-        全麦操作/锁坐：<input
+        <!-- 全麦操作/锁坐：<input
           type="checkbox"
           v-model="isLockAll"
           id="isLockAll"
@@ -110,15 +107,15 @@
           v-model="isMuteAll"
           id="isMuteAll"
         /><br />
-        房间名称<input v-model="roomName" />
+        房间名称<input v-model="roomName" /> -->
       </div>
       <div>
         <button
           title="全麦静麦/解锁全麦(操作0号座位之外所有座位)"
           @click="muteOtherSeats(muteOtherValue)"
         >
-          全麦静音/开麦</button
-        >是否静音:
+          全麦闭麦/开麦</button
+        >是否闭麦:
         <input type="checkbox" v-model="muteOtherValue" id="muteOtherValue" />
       </div>
       <div>
@@ -126,7 +123,7 @@
           title="全麦锁座/解锁全座(操作0号座位和有人座位之外所有座位)"
           @click="lockOtherSeats(lockOtherValue)"
         >
-          全麦锁坐/开坐</button
+          全麦锁座/解锁</button
         >是否锁麦:
         <input type="checkbox" v-model="lockOtherValue" id="lockOtherValue" />
       </div>
@@ -370,16 +367,14 @@ export default {
     },
     setRoomInfo: function (
       seatCountValue,
-      isLockAll,
-      isMuteAll,
-      roomName,
       isFreeEnterSeatValue
     ) {
+      console.log(sdk.roomInfo);
       const roominfo = {
         isFreeEnterSeat: isFreeEnterSeatValue,
-        isLockAll: isLockAll,
-        isMuteAll: isMuteAll,
-        roomName: roomName,
+        isLockAll: sdk.roomInfo['isLockAll'],
+        isMuteAll: sdk.roomInfo['isMuteAll'],
+        roomName: sdk.roomInfo['roomName']||'1234',
         seatCount: seatCountValue, //麦位数量
       };
       
@@ -387,7 +382,6 @@ export default {
         alert("麦位序号");
       } else {
         console.log(roominfo);
-        
         sdk.setRoomInfo(roominfo);
       }
     },
