@@ -206,9 +206,9 @@
       ><br />
       <div>
         <button title="查询并展示最新麦位信息集合" @click="getLatestSeatInfo">
-          最新麦位信息</button
+          最新麦位信息{{seatInfoList}}</button
         ><br />
-        <div v-for="(item, i) in this.seatInfoList" :key="i">
+        <div v-for="(item, i) in seatInfoList" :key="i">
           <span>{{ i }}号麦位</span>{{ item }}
         </div>
       </div>
@@ -300,6 +300,7 @@ export default {
         console.log("sdk初始化完成");
       });
       sdk.on("onSeatInfoUpdate", () => {
+        console.log("onSeatInfoUpdate");
         this._data.seatInfoList = sdk.seatInfoList;
         this.$forceUpdate()
       });
@@ -448,10 +449,11 @@ export default {
       sdk.cancelRequestSeat();
     },
     getLatestSeatInfo: async function () {
-      this.seatInfoList = await sdk.getLatestSeatInfo();
-      // this.seatInfoList = sdk.seatInfoList
-      // this.$forceUpdate();
-      // console.log("强行刷新",sdk.seatInfoList);
+      this._data.seatInfoList = sdk.seatInfoList
+      let list = await sdk.getLatestSeatInfo()
+      this.$forceUpdate();
+      
+      //需要执行一次强制刷新更新本地ui层展示
     },
     sendMessage: function () {
       const message = {
