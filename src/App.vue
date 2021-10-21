@@ -272,7 +272,8 @@ export default {
       userId: "",
       roomname: "",
       seatNum: "",
-      seatInfoList:[]
+      seatInfoList:[],
+      roomInfo:{}
     };
   },
  
@@ -304,7 +305,8 @@ export default {
       });
       sdk.on("onRoomInfoUpdate", () => {
         console.log("RoomInfo:", sdk.roomInfo);
-         this.$forceUpdate()
+        this._data.roomInfo = sdk.roomInfo;
+        this.$forceUpdate()
       });
     },
     getLatestSeatInfo: async function () {
