@@ -171,11 +171,7 @@
         >麦位序号:
         <input v-model="switchseatIndex" />
       </div>
-      <div>
-        <div v-for="(item, i) in this.RequestSeatUserIds" :key="i">
-          {{ item }}
-        </div>
-      </div>
+   
       <div>
         <button
           title="更新指定麦位的extra字段"
@@ -201,6 +197,11 @@
       >
         申请上麦集合</button
       ><br />
+        <div>
+        <div v-for="(item, i) in this.RequestSeatUserIds" :key="i">
+          {{ item }}
+        </div>
+      </div>
       <div>
         <button title="查询并展示最新麦位信息集合" @click="getLatestSeatInfo">
           最新麦位信息{{seatInfoList}}</button
@@ -233,7 +234,8 @@
 
 <script>
 //import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
-import sdk from "rcvoiceroomlib-v1"; 
+// import sdk from "rcvoiceroomlib-v1"; 
+import sdk from "../../../work/RCVoiceRoomLib-Web/dist/main.js"; 
 export default {
   name: "App",
   data: () => {
