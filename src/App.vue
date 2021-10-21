@@ -451,6 +451,7 @@ export default {
     getLatestSeatInfo: async function () {
       this._data.seatInfoList = sdk.seatInfoList
       let list = await sdk.getLatestSeatInfo()
+      console.log("远端数据",list);
       this.$forceUpdate();
       
       //需要执行一次强制刷新更新本地ui层展示
