@@ -233,8 +233,8 @@
 </template>
 
 <script>
-import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
-// import sdk from "rcvoiceroomlib-v1"; 
+//import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
+import sdk from "rcvoiceroomlib-v1"; 
 //import sdk from "../../../work/RCVoiceRoomLib-Web/dist/main.js"; 
 export default {
   name: "App",
