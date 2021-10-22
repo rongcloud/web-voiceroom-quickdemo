@@ -233,8 +233,8 @@
 </template>
 
 <script>
-//import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
- import sdk from "rcvoiceroomlib-v1"; 
+import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
+// import sdk from "rcvoiceroomlib-v1"; 
 //import sdk from "../../../work/RCVoiceRoomLib-Web/dist/main.js"; 
 export default {
   name: "App",
@@ -300,8 +300,8 @@ export default {
       sdk.on("update", () => {
         console.log("sdk初始化完成");
       });
-      sdk.on("onSeatInfoUpdate", () => {
-        console.log("onSeatInfoUpdate");
+      sdk.on("seatInfoDidUpdate", () => {
+        console.log("seatInfoDidUpdate");
         this._data.seatInfoList = sdk.seatInfoList;
         this.$forceUpdate()
       });

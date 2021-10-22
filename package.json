@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
-    "rcvoiceroomlib-v1": "0.9.12",
+    "rcvoiceroomlib-v1": "0.9.13",
     "vue": "^2.6.11"
   },
   "devDependencies": {
