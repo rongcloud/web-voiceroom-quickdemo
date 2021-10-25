@@ -2,7 +2,9 @@
   <div id="app">
     <div>appkey: <input v-model="appkey" /></div>
     <div>usertoken: <input v-model="usertoken" style="width: 800px" /></div>
-    
+    <p>
+      lRfa2J9VTfoF9BBMmpGw8t2QLXfrldGNyY21wXbbeFKscMS08fzM9ts5peb8z1U4yfTDyWlj9ukgqqP9HOUIug==@4d1h.cn.rongnav.com;4d1h.cn.rongcfg.com
+    </p>
     <div>
       <button v-on:click="start">开始初始化</button>
       <button v-on:click="connect">使用token连接</button>
@@ -83,8 +85,7 @@
           @click="
             setRoomInfo(
               seatCountValue,
-              isFreeEnterSeatValue,
-              roomName
+              isFreeEnterSeatValue
             )
           "
           title="可以设置房间信息,包括房间设置几坐，自由上麦/申请上麦操作"
@@ -105,8 +106,8 @@
           type="checkbox"
           v-model="isMuteAll"
           id="isMuteAll"
-        /><br /> -->
-        房间名称<input v-model="roomName" />
+        /><br />
+        房间名称<input v-model="roomName" /> -->
       </div>
       <div>
         <button
@@ -210,13 +211,13 @@
         </div>
       </div>
       <br />
-      <!-- <div>
+      <div>
         rtc用户操作
         <div>麦位序号: <input v-model="seatNum" /></div>
         <div>目标用户id: <input v-model="userId" /></div>
         <button v-on:click="enterSeat">上麦</button>
         <button v-on:click="leaveSeat">下麦</button>
-      </div> -->
+      </div>
     </div>
 
     <div>
@@ -241,10 +242,10 @@ export default {
       // appkey: "25wehl3u21chw",
       // usertoken:
       //   "uWgFAOO3fH4CcOmUAuGjAWRn2CMgdJTbX5Cxn5ZSuW8=@0fv3.cn.rongnav.com;0fv3.cn.rongcfg.com",
-      appkey: "",
+      appkey: "pvxdm17jpw7ar",
       usertoken:
-        "",
-      roomid: "",
+        "dJHlYAI0iZXYwg3eA2qr71PLrtzG3RtcdGqDfPiZBqSIa660hwvkMds5peb8z1U4NxwKhS40Bvft/3I7XtXazA==@4d1h.cn.rongnav.com;4d1h.cn.rongcfg.com",
+      roomid: "Q7Jv4lIYQMwpXmsJAh6qw4",
       //房主
       kickUserId: null,
       pickUserId: null,
@@ -366,60 +367,43 @@ export default {
     },
     muteSeat: function (muteSeatIndex, ismute) {
       if (muteSeatIndex == null) {
-        alert("请输入麦位序号");
+        alert("麦位序号");
       } else {
         sdk.muteSeat(muteSeatIndex, ismute);
       }
     },
     lockSeat: function (lockSeatIndex, isLocked) {
       if (lockSeatIndex == null) {
-        alert("请输入麦位序号");
+        alert("麦位序号");
       } else {
         sdk.lockSeat(lockSeatIndex, isLocked);
       }
     },
     setRoomInfo: function (
       seatCountValue,
-      isFreeEnterSeatValue,
-      roomName
+      isFreeEnterSeatValue
     ) {
       console.log(sdk.roomInfo);
       const roominfo = {
         isFreeEnterSeat: isFreeEnterSeatValue,
         isLockAll: sdk.roomInfo['isLockAll'],
         isMuteAll: sdk.roomInfo['isMuteAll'],
-        roomName: roomName||sdk.roomInfo['roomName']||'测试房间(默认房间名称)',
+        roomName: sdk.roomInfo['roomName']||'1234',
         seatCount: seatCountValue, //麦位数量
       };
       
       if (seatCountValue == null) {
-        alert("请输入麦位序号");
+        alert("麦位序号");
       } else {
         console.log(roominfo);
         sdk.setRoomInfo(roominfo);
       }
     },
     muteOtherSeats: function (muteOtherValue) {
-      // sdk.muteOtherSeats(muteOtherValue);
-        const roominfo = {
-        isFreeEnterSeat: sdk.roomInfo['isFreeEnterSeat'],
-        isLockAll: sdk.roomInfo['isLockAll'],
-        isMuteAll: muteOtherValue,
-        roomName: sdk.roomInfo['roomName']||'1234',
-        seatCount: sdk.roomInfo['seatCount'], //麦位数量
-      };
-      sdk.setRoomInfo(roominfo)
+      sdk.muteOtherSeats(muteOtherValue);
     },
     lockOtherSeats: function (lockOtherValue) {
-      // sdk.lockOtherSeats(lockOtherValue);
-          const roominfo = {
-        isFreeEnterSeat: sdk.roomInfo['isFreeEnterSeat'],
-        isLockAll: lockOtherValue,
-        isMuteAll: sdk.roomInfo['isMuteAll'],
-        roomName: sdk.roomInfo['roomName']||'1234',
-        seatCount: sdk.roomInfo['seatCount'], //麦位数量
-      };
-      sdk.setRoomInfo(roominfo)
+      sdk.lockOtherSeats(lockOtherValue);
     },
     acceptRequestSeat: function (acceptRequestSeatId) {
       if (acceptRequestSeatId == null) {
