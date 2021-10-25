@@ -221,7 +221,6 @@
     </div>
 
     <div>
-    
        <!-- <div v-for="(item, index) in seatInfoList" :key="index">
         | 当前状态:{{ item.status }} | 是否静音:{{ item.mute }} | 用户id:{{
           item.userId
