@@ -2,9 +2,7 @@
   <div id="app">
     <div>appkey: <input v-model="appkey" /></div>
     <div>usertoken: <input v-model="usertoken" style="width: 800px" /></div>
-    <p>
-      lRfa2J9VTfoF9BBMmpGw8t2QLXfrldGNyY21wXbbeFKscMS08fzM9ts5peb8z1U4yfTDyWlj9ukgqqP9HOUIug==@4d1h.cn.rongnav.com;4d1h.cn.rongcfg.com
-    </p>
+    
     <div>
       <button v-on:click="start">开始初始化</button>
       <button v-on:click="connect">使用token连接</button>
@@ -243,10 +241,10 @@ export default {
       // appkey: "25wehl3u21chw",
       // usertoken:
       //   "uWgFAOO3fH4CcOmUAuGjAWRn2CMgdJTbX5Cxn5ZSuW8=@0fv3.cn.rongnav.com;0fv3.cn.rongcfg.com",
-      appkey: "pvxdm17jpw7ar",
+      appkey: "",
       usertoken:
-        "dJHlYAI0iZXYwg3eA2qr71PLrtzG3RtcdGqDfPiZBqSIa660hwvkMds5peb8z1U4NxwKhS40Bvft/3I7XtXazA==@4d1h.cn.rongnav.com;4d1h.cn.rongcfg.com",
-      roomid: "Q7Jv4lIYQMwpXmsJAh6qw4",
+        "",
+      roomid: "",
       //房主
       kickUserId: null,
       pickUserId: null,
