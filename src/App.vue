@@ -85,7 +85,8 @@
           @click="
             setRoomInfo(
               seatCountValue,
-              isFreeEnterSeatValue
+              isFreeEnterSeatValue,
+              roomName
             )
           "
           title="可以设置房间信息,包括房间设置几坐，自由上麦/申请上麦操作"
@@ -106,8 +107,8 @@
           type="checkbox"
           v-model="isMuteAll"
           id="isMuteAll"
-        /><br />
-        房间名称<input v-model="roomName" /> -->
+        /><br /> -->
+        房间名称<input v-model="roomName" />
       </div>
       <div>
         <button
@@ -211,13 +212,13 @@
         </div>
       </div>
       <br />
-      <div>
+      <!-- <div>
         rtc用户操作
         <div>麦位序号: <input v-model="seatNum" /></div>
         <div>目标用户id: <input v-model="userId" /></div>
         <button v-on:click="enterSeat">上麦</button>
         <button v-on:click="leaveSeat">下麦</button>
-      </div>
+      </div> -->
     </div>
 
     <div>
@@ -368,43 +369,60 @@ export default {
     },
     muteSeat: function (muteSeatIndex, ismute) {
       if (muteSeatIndex == null) {
-        alert("麦位序号");
+        alert("请输入麦位序号");
       } else {
         sdk.muteSeat(muteSeatIndex, ismute);
       }
     },
     lockSeat: function (lockSeatIndex, isLocked) {
       if (lockSeatIndex == null) {
-        alert("麦位序号");
+        alert("请输入麦位序号");
       } else {
         sdk.lockSeat(lockSeatIndex, isLocked);
       }
     },
     setRoomInfo: function (
       seatCountValue,
-      isFreeEnterSeatValue
+      isFreeEnterSeatValue,
+      roomName
     ) {
       console.log(sdk.roomInfo);
       const roominfo = {
         isFreeEnterSeat: isFreeEnterSeatValue,
         isLockAll: sdk.roomInfo['isLockAll'],
         isMuteAll: sdk.roomInfo['isMuteAll'],
-        roomName: sdk.roomInfo['roomName']||'1234',
+        roomName: roomName||sdk.roomInfo['roomName']||'测试房间(默认房间名称)',
         seatCount: seatCountValue, //麦位数量
       };
       
       if (seatCountValue == null) {
-        alert("麦位序号");
+        alert("请输入麦位序号");
       } else {
         console.log(roominfo);
         sdk.setRoomInfo(roominfo);
       }
     },
     muteOtherSeats: function (muteOtherValue) {
-      sdk.muteOtherSeats(muteOtherValue);
+      // sdk.muteOtherSeats(muteOtherValue);
+        const roominfo = {
+        isFreeEnterSeat: sdk.roomInfo['isFreeEnterSeat'],
+        isLockAll: sdk.roomInfo['isLockAll'],
+        isMuteAll: muteOtherValue,
+        roomName: sdk.roomInfo['roomName']||'1234',
+        seatCount: sdk.roomInfo['seatCount'], //麦位数量
+      };
+      sdk.setRoomInfo(roominfo)
     },
     lockOtherSeats: function (lockOtherValue) {
-      sdk.lockOtherSeats(lockOtherValue);
+      // sdk.lockOtherSeats(lockOtherValue);
+          const roominfo = {
+        isFreeEnterSeat: sdk.roomInfo['isFreeEnterSeat'],
+        isLockAll: lockOtherValue,
+        isMuteAll: sdk.roomInfo['isMuteAll'],
+        roomName: sdk.roomInfo['roomName']||'1234',
+        seatCount: sdk.roomInfo['seatCount'], //麦位数量
+      };
+      sdk.setRoomInfo(roominfo)
     },
     acceptRequestSeat: function (acceptRequestSeatId) {
       if (acceptRequestSeatId == null) {
