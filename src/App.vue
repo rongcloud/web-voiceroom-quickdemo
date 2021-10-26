@@ -211,13 +211,13 @@
         </div>
       </div>
       <br />
-      <div>
+      <!-- <div>
         rtc用户操作
         <div>麦位序号: <input v-model="seatNum" /></div>
         <div>目标用户id: <input v-model="userId" /></div>
         <button v-on:click="enterSeat">上麦</button>
         <button v-on:click="leaveSeat">下麦</button>
-      </div>
+      </div> -->
     </div>
 
     <div>
