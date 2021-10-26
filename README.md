@@ -1,24 +1,17 @@
-# demo
+# rcvoiceroomlib quickdemo
 
-## Project setup
+## 项目安装
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 编译并发布
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+### 项目简介
+本项目为 融云语聊房sdk快速接入的演示项目。
+项目中使用到的 appkey 和 usertoken
 
-### Lints and fixes files
-```
-npm run lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
