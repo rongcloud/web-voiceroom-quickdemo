@@ -189,8 +189,8 @@
       <button title="用户主动发起取消排麦" @click="cancelRequestSeat">
         取消排麦</button
       ><br />
-      <button title="模拟发送消息动作" @click="sendMessage">发送消息</button
-      ><br />
+     
+    
       <button
         title="查询并展示已发起申请上麦的ID集合"
         @click="getRequestSeatUserIds"
@@ -232,8 +232,8 @@
 </template>
 
 <script>
-//import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
-import sdk from "rcvoiceroomlib-v1"; 
+import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
+//import sdk from "rcvoiceroomlib-v1"; 
 //import sdk from "../../../work/RCVoiceRoomLib-Web/dist/main.js"; 
 export default {
   name: "App",
