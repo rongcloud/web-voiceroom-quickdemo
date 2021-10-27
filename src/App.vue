@@ -2,9 +2,7 @@
   <div id="app">
     <div>appkey: <input v-model="appkey" /></div>
     <div>usertoken: <input v-model="usertoken" style="width: 800px" /></div>
-    <p>
-      lRfa2J9VTfoF9BBMmpGw8t2QLXfrldGNyY21wXbbeFKscMS08fzM9ts5peb8z1U4yfTDyWlj9ukgqqP9HOUIug==@4d1h.cn.rongnav.com;4d1h.cn.rongcfg.com
-    </p>
+  
     <div>
       <button v-on:click="start">开始初始化</button>
       <button v-on:click="connect">使用token连接</button>
