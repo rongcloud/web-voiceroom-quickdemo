@@ -211,41 +211,23 @@
         </div>
       </div>
       <br />
-      <!-- <div>
-        rtc用户操作
-        <div>麦位序号: <input v-model="seatNum" /></div>
-        <div>目标用户id: <input v-model="userId" /></div>
-        <button v-on:click="enterSeat">上麦</button>
-        <button v-on:click="leaveSeat">下麦</button>
-      </div> -->
-    </div>
-
-    <div>
-       <!-- <div v-for="(item, index) in seatInfoList" :key="index">
-        | 当前状态:{{ item.status }} | 是否静音:{{ item.mute }} | 用户id:{{
-          item.userId
-        }}
-        | 自定义:{{ item.extra }}
-      </div> -->
     </div>
   </div>
 </template>
 
 <script>
-//import sdk from "/Users/cuifengbo/work/RCVoiceRoomLib-Web/dist/main.js";
-import sdk from "rcvoiceroomlib-v1"; 
-//import sdk from "../../../work/RCVoiceRoomLib-Web/dist/main.js"; 
+
+import RCVoiceRoomLib from "@rongcloud/rcvoiceroomlib-v1"; 
+
 export default {
   name: "App",
   data: () => {
     return {
-      // appkey: "25wehl3u21chw",
-      // usertoken:
-      //   "uWgFAOO3fH4CcOmUAuGjAWRn2CMgdJTbX5Cxn5ZSuW8=@0fv3.cn.rongnav.com;0fv3.cn.rongcfg.com",
-      appkey: "pvxdm17jpw7ar",
+     
+      appkey: "",
       usertoken:
-        "dJHlYAI0iZXYwg3eA2qr71PLrtzG3RtcdGqDfPiZBqSIa660hwvkMds5peb8z1U4NxwKhS40Bvft/3I7XtXazA==@4d1h.cn.rongnav.com;4d1h.cn.rongcfg.com",
-      roomid: "Q7Jv4lIYQMwpXmsJAh6qw4",
+        "",
+      roomid: "",
       //房主
       kickUserId: null,
       pickUserId: null,
@@ -279,7 +261,7 @@ export default {
   },
  
   mounted() {
-    window.a = sdk;
+    window.a = RCVoiceRoomLib;
     console.log("----------------");
   },
   watch:{
@@ -292,35 +274,35 @@ export default {
   },
   methods: {
     start: function () {
-      sdk.init(this._data.appkey);
-      sdk.on("ready", () => {
-        console.log("sdk初始化完成");
+      RCVoiceRoomLib.init(this._data.appkey);
+      RCVoiceRoomLib.on("ready", () => {
+        console.log("RCVoiceRoomLib初始化完成");
       });
-      sdk.on("update", () => {
-        console.log("sdk初始化完成");
+      RCVoiceRoomLib.on("update", () => {
+        console.log("RCVoiceRoomLib初始化完成");
       });
-      sdk.on("seatInfoDidUpdate", () => {
+      RCVoiceRoomLib.on("seatInfoDidUpdate", () => {
         console.log("seatInfoDidUpdate");
-        this._data.seatInfoList = sdk.seatInfoList;
+        this._data.seatInfoList = RCVoiceRoomLib.seatInfoList;
         this.$forceUpdate()
       });
-      sdk.on("onRoomInfoUpdate", () => {
-        console.log("RoomInfo:", sdk.roomInfo);
-        this._data.roomInfo = sdk.roomInfo;
+      RCVoiceRoomLib.on("onRoomInfoUpdate", () => {
+        console.log("RoomInfo:", RCVoiceRoomLib.roomInfo);
+        this._data.roomInfo = RCVoiceRoomLib.roomInfo;
         this.$forceUpdate()
       });
     },
     getLatestSeatInfo: async function () {
-      this._data.seatInfoList = sdk.seatInfoList
-      //  this.$set(this.seatInfoList,index,sdk.seatInfoList)
-      let list = await sdk.getLatestSeatInfo()
+      this._data.seatInfoList = RCVoiceRoomLib.seatInfoList
+      //  this.$set(this.seatInfoList,index,RCVoiceRoomLib.seatInfoList)
+      let list = await RCVoiceRoomLib.getLatestSeatInfo()
       console.log("远端数据",list);
       this.$forceUpdate();
       
       //需要执行一次强制刷新更新本地ui层展示
     },
     connect() {
-      sdk.connect(this._data.usertoken);
+      RCVoiceRoomLib.connect(this._data.usertoken);
     },
     createAndJoinRoom() {
       if (this._data.roomid == "") {
@@ -331,64 +313,64 @@ export default {
         //如果房间名称为空则设置为与id相同  roomname 是可选参数
         this._data.roomname = this._data.roomid;
       }
-      sdk.createAndJoinRoom({
+      RCVoiceRoomLib.createAndJoinRoom({
         roomId: this._data.roomid,
         roomName: this._data.roomname,
       });
-      //sdk.onec("joinroom")
+      //RCVoiceRoomLib.onec("joinroom")
     },
     joinRoom() {
-      sdk.joinRoom(this._data.roomid);
+      RCVoiceRoomLib.joinRoom(this._data.roomid);
     },
     leaveRoom() {
-      sdk.leaveRoom(this._data.roomid);
+      RCVoiceRoomLib.leaveRoom(this._data.roomid);
     },
     //房主
     kickUserFromSeat: function (kickUserId) {
       if (kickUserId == null) {
         alert("请输入指定麦位id");
       } else {
-        sdk.kickUserFromSeat(kickUserId);
+        RCVoiceRoomLib.kickUserFromSeat(kickUserId);
       }
     },
     pickUserToSeat: function (pickUserId) {
       if (pickUserId == null) {
         alert("请输入指定麦位id");
       } else {
-        sdk.pickUserToSeat(pickUserId);
+        RCVoiceRoomLib.pickUserToSeat(pickUserId);
       }
     },
     kickUserFromRoom: function (kickUserRoomId) {
       if (kickUserRoomId == null) {
         alert("请输入指定麦位id");
       } else {
-        sdk.kickUserFromRoom(kickUserRoomId);
+        RCVoiceRoomLib.kickUserFromRoom(kickUserRoomId);
       }
     },
     muteSeat: function (muteSeatIndex, ismute) {
       if (muteSeatIndex == null) {
         alert("麦位序号");
       } else {
-        sdk.muteSeat(muteSeatIndex, ismute);
+        RCVoiceRoomLib.muteSeat(muteSeatIndex, ismute);
       }
     },
     lockSeat: function (lockSeatIndex, isLocked) {
       if (lockSeatIndex == null) {
         alert("麦位序号");
       } else {
-        sdk.lockSeat(lockSeatIndex, isLocked);
+        RCVoiceRoomLib.lockSeat(lockSeatIndex, isLocked);
       }
     },
     setRoomInfo: function (
       seatCountValue,
       isFreeEnterSeatValue
     ) {
-      console.log(sdk.roomInfo);
+      console.log(RCVoiceRoomLib.roomInfo);
       const roominfo = {
         isFreeEnterSeat: isFreeEnterSeatValue,
-        isLockAll: sdk.roomInfo['isLockAll'],
-        isMuteAll: sdk.roomInfo['isMuteAll'],
-        roomName: sdk.roomInfo['roomName']||'1234',
+        isLockAll: RCVoiceRoomLib.roomInfo['isLockAll'],
+        isMuteAll: RCVoiceRoomLib.roomInfo['isMuteAll'],
+        roomName: RCVoiceRoomLib.roomInfo['roomName']||'1234',
         seatCount: seatCountValue, //麦位数量
       };
       
@@ -396,27 +378,27 @@ export default {
         alert("麦位序号");
       } else {
         console.log(roominfo);
-        sdk.setRoomInfo(roominfo);
+        RCVoiceRoomLib.setRoomInfo(roominfo);
       }
     },
     muteOtherSeats: function (muteOtherValue) {
-      sdk.muteOtherSeats(muteOtherValue);
+      RCVoiceRoomLib.muteOtherSeats(muteOtherValue);
     },
     lockOtherSeats: function (lockOtherValue) {
-      sdk.lockOtherSeats(lockOtherValue);
+      RCVoiceRoomLib.lockOtherSeats(lockOtherValue);
     },
     acceptRequestSeat: function (acceptRequestSeatId) {
       if (acceptRequestSeatId == null) {
         alert("请输入同意用户id");
       } else {
-        sdk.acceptRequestSeat(acceptRequestSeatId);
+        RCVoiceRoomLib.acceptRequestSeat(acceptRequestSeatId);
       }
     },
     rejectRequestSeat: function (rejectRequestSeatId) {
       if (rejectRequestSeatId == null) {
         alert("请输入拒绝用户id");
       } else {
-        sdk.rejectRequestSeat(rejectRequestSeatId);
+        RCVoiceRoomLib.rejectRequestSeat(rejectRequestSeatId);
       }
     },
     //观众
@@ -424,37 +406,37 @@ export default {
       if (enterseatIndex == null) {
         alert("请输入麦位序号");
       } else {
-        sdk.enterSeat(Number(enterseatIndex));
+        RCVoiceRoomLib.enterSeat(Number(enterseatIndex));
       }
     },
     leaveSeat: function () {
-      sdk.leaveSeat();
+      RCVoiceRoomLib.leaveSeat();
     },
     switchSeatTo: function (switchseatIndex) {
       if (switchseatIndex == null) {
         alert("请输入麦位序号");
       } else {
-        sdk.switchSeatTo(switchseatIndex);
+        RCVoiceRoomLib.switchSeatTo(switchseatIndex);
       }
     },
     disConnect: function () {
-      sdk.disConnect();
+      RCVoiceRoomLib.disConnect();
     },
     getRequestSeatUserIds: async function () {
-      this.RequestSeatUserIds = await sdk.getRequestSeatUserIds();
+      this.RequestSeatUserIds = await RCVoiceRoomLib.getRequestSeatUserIds();
     },
     updateSeatInfo: function (updateSeatIndex, updateExtra) {
       if (updateSeatIndex == null) {
         alert("请输入麦位序号");
       } else {
-        sdk.updateSeatInfo(updateSeatIndex, updateExtra);
+        RCVoiceRoomLib.updateSeatInfo(updateSeatIndex, updateExtra);
       }
     },
     requestSeat: function () {
-      sdk.requestSeat();
+      RCVoiceRoomLib.requestSeat();
     },
     cancelRequestSeat: function () {
-      sdk.cancelRequestSeat();
+      RCVoiceRoomLib.cancelRequestSeat();
     },
    
     sendMessage: function () {
@@ -462,11 +444,11 @@ export default {
         messageType: "RC:VRLRefreshMsg", // 'RC:TxtMsg'
         content: { name: "RCUserOnSeatSpeakingKey_0", content: 1 },
       };
-      sdk.sendMessage(message);
+      RCVoiceRoomLib.sendMessage(message);
       // const name = "RCAudienceLeaveRoom",
       //   content = "265e3bf0-fafe-40f0-9521-63929501db78";
 
-      // sdk.notifyVoiceRoom(name, content);
+      // RCVoiceRoomLib.notifyVoiceRoom(name, content);
     },
   },
 };
