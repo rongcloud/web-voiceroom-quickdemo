@@ -1,208 +1,332 @@
 <template>
   <div id="app">
-    <div>appkey: <input v-model="appkey" /></div>
-    <div>usertoken: <input v-model="usertoken" style="width: 800px" /></div>
-  
     <div>
-      <button v-on:click="start">开始初始化</button>
-      <button v-on:click="connect">使用token连接</button>
+      appkey:
+      <el-input v-model="appkey" size="mini" style="width: 200px" />
+      <el-button
+        size="mini"
+        type="primary"
+        v-on:click="start"
+        style="margin-left: 20px"
+        >appkey初始化</el-button
+      >
+      usertoken:<el-input
+        size="mini"
+        v-model="usertoken"
+        style="width: 200px"
+      ></el-input>
+      <el-button
+        size="mini"
+        type="primary"
+        v-on:click="connect"
+        style="margin-left: 20px"
+        >token连接</el-button
+      >
     </div>
     <div>
-      roomid:
-      <input
+      房间ID:
+      <el-input
+        size="mini"
         v-model="roomid"
         title="可依据开发者工具创建房间，生成房间id、房间名称，作为观众方加入，也可作为房主主动创建并加入一个自定义id、名称的房间"
-        placeholder="输入roomid"
+        placeholder="输入房间ID"
         class="inputID"
       />
-    </div>
-    <div>
-      roomname:
-      <input
+      房间名称:
+      <el-input
+        size="mini"
         v-model="roomname"
-        placeholder="输入roomname，非必填"
+        placeholder="输入房间名称，非必填"
         class="inputID"
       />
+      <el-button
+        style="margin-left: 20px"
+        size="small"
+        title="主动打开播放器"
+        round
+        type="warning"
+        @click="openPlayer"
+      >
+        safari打开播放器</el-button
+      >
     </div>
+    <div></div>
     <div class="block">
       <div>模拟房主操作</div>
-      <button @click="createAndJoinRoom" title="创建并加入新创建房间中">
-        createAndJoinRoom
-      </button>
-      <button @click="leaveRoom">leaveRoom</button><br />
+      <el-button
+        size="mini"
+        @click="createAndJoinRoom"
+        title="创建并加入新创建房间中"
+      >
+        创建并加入房间
+      </el-button>
+      <el-button size="mini" @click="leaveRoom">离开房间</el-button><br />
       <div>
-        <button
+        <el-button
+          size="mini"
           title="将一个指定并已经在麦上的用户踢下麦"
           @click="kickUserFromSeat(kickUserId)"
         >
-          指定用户下麦</button
+          指定用户下麦</el-button
         >用户id:
-        <input v-model="kickUserId" />
+        <el-input size="mini" v-model="kickUserId" class="inputID" />
       </div>
       <div>
-        <button
+        <el-button
+          size="mini"
           title="发送一个邀请指定用户上麦的消息"
           @click="pickUserToSeat(pickUserId)"
         >
-          抱用户上麦</button
+          邀请用户上麦</el-button
         >用户id:
-        <input v-model="pickUserId" />
+        <el-input size="mini" v-model="pickUserId" class="inputID" />
       </div>
       <div>
-        <button
+        <el-button
+          size="mini"
           title="将一个已存在房间中的用户踢出房间"
           @click="kickUserFromRoom(kickUserRoomId)"
         >
-          踢出房间</button
+          踢用户出房间</el-button
         >用户id:
-        <input v-model="kickUserRoomId" />
+        <el-input v-model="kickUserRoomId" class="inputID" size="mini" />
       </div>
       <div>
-        <button
+        <el-button
+          size="mini"
           title="控制指定麦位的静音与否"
           @click="muteSeat(muteSeatIndex, ismute)"
         >
-          单麦闭麦</button
-        >麦位序号: <input v-model="muteSeatIndex" class="inputOther" />
+          单麦闭麦</el-button
+        >麦位序号:
+        <el-input v-model="muteSeatIndex" class="inputOther" size="mini" />
         是否静音:
-        <input type="checkbox" v-model="ismute" id="ismute" />
+        <el-checkbox type="checkbox" v-model="ismute" id="ismute" size="mini" />
         <!-- <input v-model="ismute" /> -->
       </div>
       <div>
-        <button
+        <el-button
+          size="mini"
           title="控制指定麦位的锁定与否"
           @click="lockSeat(lockSeatIndex, isLocked)"
         >
-          单麦锁座</button
-        >麦位序号: <input v-model="lockSeatIndex" class="inputOther" />
+          单麦锁座</el-button
+        >麦位序号:
+        <el-input v-model="lockSeatIndex" class="inputOther" size="mini" />
         是否锁麦:
-        <input v-model="isLocked" type="checkbox" id="isLocked" />
+        <el-checkbox
+          v-model="isLocked"
+          type="checkbox"
+          id="isLocked"
+          size="mini"
+        />
       </div>
       <div>
-        <button
-          @click="
-            setRoomInfo(
-              seatCountValue,
-              isFreeEnterSeatValue
-            )
-          "
+        <el-button
+          size="mini"
+          @click="setRoomInfo(seatCountValue, isFreeEnterSeatValue)"
           title="可以设置房间信息,包括房间设置几坐，自由上麦/申请上麦操作"
         >
-          设置座位数/上麦模式（自由/申请）</button
-        >座位: <input v-model="seatCountValue" class="inputOther" /><br />
-        上麦自由/申请：<input
+          设置座位数/上麦模式（自由/申请）</el-button
+        >座位:
+        <el-input
+          v-model="seatCountValue"
+          class="inputOther"
+          size="mini"
+        /><br />
+        自由/申请上麦：<el-checkbox
+          size="mini"
           v-model="isFreeEnterSeatValue"
           type="checkbox"
           id="isFreeEnterSeatValue"
         /><br />
-        <!-- 全麦操作/锁坐：<input
-          type="checkbox"
-          v-model="isLockAll"
-          id="isLockAll"
-        /><br />
-        全麦操作/静麦：<input
-          type="checkbox"
-          v-model="isMuteAll"
-          id="isMuteAll"
-        /><br />
-        房间名称<input v-model="roomName" /> -->
       </div>
       <div>
-        <button
+        <el-button
+          size="mini"
           title="全麦静麦/解锁全麦(操作0号座位之外所有座位)"
           @click="muteOtherSeats(muteOtherValue)"
         >
-          全麦闭麦/开麦</button
+          全麦闭麦/开麦</el-button
         >是否闭麦:
-        <input type="checkbox" v-model="muteOtherValue" id="muteOtherValue" />
+        <el-checkbox
+          size="mini"
+          type="checkbox"
+          v-model="muteOtherValue"
+          id="muteOtherValue"
+        />
       </div>
       <div>
-        <button
+        <el-button
+          size="mini"
           title="全麦锁座/解锁全座(操作0号座位和有人座位之外所有座位)"
           @click="lockOtherSeats(lockOtherValue)"
         >
-          全麦锁座/解锁</button
+          全麦锁座/解锁</el-button
         >是否锁麦:
-        <input type="checkbox" v-model="lockOtherValue" id="lockOtherValue" />
+        <el-checkbox
+          size="mini"
+          type="checkbox"
+          v-model="lockOtherValue"
+          id="lockOtherValue"
+        />
       </div>
       <div>
-        <button
+        <el-button
+          size="mini"
           title="同意指定id用户排麦请求"
           @click="acceptRequestSeat(acceptRequestSeatId)"
         >
-          同意排麦请求</button
+          同意排麦请求</el-button
         >用户id:
-        <input v-model="acceptRequestSeatId" />
+        <el-input v-model="acceptRequestSeatId" class="inputID" size="mini" />
       </div>
       <div>
-        <button
+        <el-button
+          size="mini"
           title="拒绝指定id用户排麦请求"
           @click="rejectRequestSeat(rejectRequestSeatId)"
         >
-          拒绝排麦请求</button
+          拒绝排麦请求</el-button
         >用户id:
-        <input v-model="rejectRequestSeatId" />
+        <el-input v-model="rejectRequestSeatId" class="inputID" size="mini" />
+      </div>
+      <div>
+        <el-button
+          size="mini"
+          title="静音所有远程音频流"
+          @click="muteAllRemoteStreams(muteOtherAll)"
+        >
+          静音所有远程音频流</el-button
+        >是否静音远程:
+        <el-checkbox
+          type="checkbox"
+          v-model="muteOtherAll"
+          id="muteOtherAll"
+          size="mini"
+        />
+      </div>
+      <div>
+        <el-button
+          size="mini"
+          title="禁用本地麦克风"
+          @click="disableAudioRecording(isDisable)"
+        >
+          禁用本地麦克风</el-button
+        >是否禁用本地麦克风:
+        <el-checkbox
+          type="checkbox"
+          v-model="isDisable"
+          id="isDisable"
+          size="mini"
+        />
+      </div>
+      <div>
+        选择歌曲:
+        <input
+          size="mini"
+          type="file"
+          id="file"
+          value="选择歌曲"
+          @change="handleFileChange"
+          name="file"
+          style="width: 180px"
+          accept="audio/*,.mp3"
+        />
+        <el-button size="mini" title="播放选择本地 MP3 文件" @click="play"
+          >播放</el-button
+        >
+        <el-button
+          size="mini"
+          title="停止播放已播放 MP3 文件"
+          @click="stopCreateTrack"
+        >
+          停止播放
+        </el-button>
       </div>
     </div>
-    <div class="block">
+    <div class="blockT">
       <div>模拟观众操作</div>
-      <button @click="joinRoom">joinRoom</button>
-      <button @click="leaveRoom">leaveRoom</button>
+      <el-button size="mini" @click="joinRoom">加入房间</el-button>
+      <el-button size="mini" @click="leaveRoom">离开房间</el-button>
 
       <div>
-        <button title="用户主动发起上麦操作" @click="enterSeat(enterseatIndex)">
-          用户上麦</button
+        <el-button
+          size="mini"
+          title="用户主动发起上麦操作"
+          @click="enterSeat(enterseatIndex)"
+        >
+          用户上麦</el-button
         >麦位序号:
-        <input v-model="enterseatIndex" class="inputOther" />
+        <el-input size="mini" v-model="enterseatIndex" class="inputOther" />
       </div>
       <div>
-        <button title="用户主动发起下麦操作" @click="leaveSeat(leaveseatIndex)">
+        <el-button
+          size="mini"
+          title="用户主动发起下麦操作"
+          @click="leaveSeat(leaveseatIndex)"
+        >
           用户下麦
-        </button>
+        </el-button>
       </div>
       <div>
-        <button
+        <el-button
+          size="mini"
           title="用户主动发起跳麦操作"
           @click="switchSeatTo(switchseatIndex)"
         >
-          用户跳麦</button
+          用户跳麦</el-button
         >麦位序号:
-        <input v-model="switchseatIndex" />
+        <el-input size="mini" v-model="switchseatIndex" class="inputOther" />
       </div>
-   
+
       <div>
-        <button
+        <el-button
+          size="mini"
           title="更新指定麦位的extra字段"
           @click="updateSeatInfo(updateSeatIndex, updateExtra)"
         >
-          更新extra字段</button
-        >麦位序号: <input v-model="updateSeatIndex" /><br />extra:<input
+          更新extra字段</el-button
+        >麦位序号:
+        <el-input
+          v-model="updateSeatIndex"
+          size="mini"
+          class="inputOther"
+        /><br />extra:<el-input
           v-model="updateExtra"
+          class="inputID"
+          size="mini"
         />
       </div>
-
-      <!-- <button @click="disConnect">主动断开连接</button><br /> -->
-      <button title="用户主动发起请求排麦" @click="requestSeat">请求排麦</button
+      <el-button size="mini" title="用户主动发起请求排麦" @click="requestSeat"
+        >请求排麦</el-button
       ><br />
-      <button title="用户主动发起取消排麦" @click="cancelRequestSeat">
-        取消排麦</button
+      <el-button
+        size="mini"
+        title="用户主动发起取消排麦"
+        @click="cancelRequestSeat"
+      >
+        取消排麦</el-button
       ><br />
-     
-    
-      <button
+      <el-button
+        size="mini"
         title="查询并展示已发起申请上麦的ID集合"
         @click="getRequestSeatUserIds"
       >
-        申请上麦集合</button
+        申请上麦集合</el-button
       ><br />
-        <div>
+      <div>
         <div v-for="(item, i) in this.RequestSeatUserIds" :key="i">
           {{ item }}
         </div>
       </div>
       <div>
-        <button title="查询并展示最新麦位信息集合" @click="getLatestSeatInfo">
-          最新麦位信息</button
+        <el-button
+          size="mini"
+          title="查询并展示最新麦位信息集合"
+          @click="getLatestSeatInfo"
+        >
+          最新麦位信息</el-button
         ><br />
         <div v-for="(item, i) in seatInfoList" :key="i">
           <span>{{ i }}号麦位</span>{{ item }}
@@ -214,17 +338,13 @@
 </template>
 
 <script>
-
-import RCVoiceRoomLib from "@rongcloud/rcvoiceroomlib-v1"; 
-
 export default {
   name: "App",
   data: () => {
     return {
-     
       appkey: "",
-      usertoken:
-        "",
+      usertoken: "",
+      user: "1",
       roomid: "",
       //房主
       kickUserId: null,
@@ -236,8 +356,8 @@ export default {
       isLocked: true,
       seatCountValue: 9,
       isFreeEnterSeatValue: true,
-      isLockAll: false,
-      isMuteAll: false,
+      muteOtherAll: true,
+      isDisable: true,
       roomName: "",
       muteOtherValue: true,
       lockOtherValue: true,
@@ -253,201 +373,322 @@ export default {
       userId: "",
       roomname: "",
       seatNum: "",
-      seatInfoList:[],
-      roomInfo:{}
+      seatInfoList: [],
+      roomInfo: {},
+      music: null,
     };
   },
- 
-  mounted() {
-    window.a = RCVoiceRoomLib;
-    console.log("----------------");
+  created() {
+    // this.$RCVoiceRoomLib.init({
+    //   AppKey: "pvxdm17jpw7ar",
+    // });
   },
-  watch:{
-      seatInfoList:{//深度监听，可监听到对象、数组的变化
-          handler(val, oldVal){
-              console.log("b.c: "+val, oldVal);
-          },
-          deep:true //true 深度监听
-      }
+  watch: {
+    seatInfoList: {
+      //深度监听，可监听到对象、数组的变化
+      handler(val, oldVal) {
+        console.log("b.c: " + val, oldVal);
+      },
+      deep: true, //true 深度监听
+    },
   },
   methods: {
     start: function () {
-      RCVoiceRoomLib.init(this._data.appkey);
-      RCVoiceRoomLib.on("ready", () => {
-        console.log("RCVoiceRoomLib初始化完成");
-      });
-      RCVoiceRoomLib.on("update", () => {
-        console.log("RCVoiceRoomLib初始化完成");
-      });
-      RCVoiceRoomLib.on("seatInfoDidUpdate", () => {
-        console.log("seatInfoDidUpdate");
-        this._data.seatInfoList = RCVoiceRoomLib.seatInfoList;
-        this.$forceUpdate()
-      });
-      RCVoiceRoomLib.on("onRoomInfoUpdate", () => {
-        console.log("RoomInfo:", RCVoiceRoomLib.roomInfo);
-        this._data.roomInfo = RCVoiceRoomLib.roomInfo;
-        this.$forceUpdate()
-      });
+      if (!this.appkey) {
+        this.$message("请填写appkey");
+        return;
+      }
+      this.$RCVoiceRoomLib.init({ AppKey: this._data.appkey });
+    },
+    openPlayer: async function () {
+      this.$RCVoiceRoomLib.enableSpeaker();
     },
     getLatestSeatInfo: async function () {
-      this._data.seatInfoList = RCVoiceRoomLib.seatInfoList
-      //  this.$set(this.seatInfoList,index,RCVoiceRoomLib.seatInfoList)
-      let list = await RCVoiceRoomLib.getLatestSeatInfo()
-      console.log("远端数据",list);
-      this.$forceUpdate();
-      
-      //需要执行一次强制刷新更新本地ui层展示
+      console.log(this.roomid);
+      if (this.roomid) {
+        this._data.seatInfoList =
+          await this.$RCVoiceRoomLib.getLatestSeatInfo();
+      } else {
+        this._data.seatInfoList = [];
+      }
+      //  this._data.seatInfoList = this.$RCVoiceRoomLib.seatInfoLis
     },
     connect() {
-      RCVoiceRoomLib.connect(this._data.usertoken);
+      if (!this.usertoken) {
+        this.$message("请填写usertoken");
+        return;
+      }
+
+      this.$RCVoiceRoomLib.connect(this.usertoken);
     },
-    createAndJoinRoom() {
+    async createAndJoinRoom() {
       if (this._data.roomid == "") {
-        alert("房间id不能为空");
+        this.$message("房间id不能为空");
         return;
       }
       if (this._data.roomname == "") {
         //如果房间名称为空则设置为与id相同  roomname 是可选参数
         this._data.roomname = this._data.roomid;
       }
-      RCVoiceRoomLib.createAndJoinRoom({
+      await this.$RCVoiceRoomLib.createAndJoinRoom({
         roomId: this._data.roomid,
         roomName: this._data.roomname,
+        seatCount: 9,
       });
-      //RCVoiceRoomLib.onec("joinroom")
+      this.getLatestSeatInfo();
     },
-    joinRoom() {
-      RCVoiceRoomLib.joinRoom(this._data.roomid);
+    async joinRoom() {
+      if (!this._data.roomid) {
+        this.$message("房间id不能为空");
+        return;
+      }
+      await this.$RCVoiceRoomLib.joinRoom(this._data.roomid);
+      this.getLatestSeatInfo();
     },
-    leaveRoom() {
-      RCVoiceRoomLib.leaveRoom(this._data.roomid);
+    async leaveRoom() {
+      await this.$RCVoiceRoomLib.leaveRoom(this._data.roomid);
+      this.roomid = "";
+      this.getLatestSeatInfo();
     },
     //房主
-    kickUserFromSeat: function (kickUserId) {
-      if (kickUserId == null) {
-        alert("请输入指定麦位id");
+    kickUserFromSeat: async function (kickUserId) {
+      if (!kickUserId) {
+        this.$message("请输入指定麦位id");
       } else {
-        RCVoiceRoomLib.kickUserFromSeat(kickUserId);
+        await this.$RCVoiceRoomLib.kickUserFromSeat(kickUserId);
+        this.getLatestSeatInfo();
       }
     },
-    pickUserToSeat: function (pickUserId) {
+    pickUserToSeat: async function (pickUserId) {
       if (pickUserId == null) {
-        alert("请输入指定麦位id");
+        this.$message("请输入指定麦位id");
       } else {
-        RCVoiceRoomLib.pickUserToSeat(pickUserId);
+        await this.$RCVoiceRoomLib.pickUserToSeat(pickUserId);
+        this.getLatestSeatInfo();
       }
     },
-    kickUserFromRoom: function (kickUserRoomId) {
+    kickUserFromRoom: async function (kickUserRoomId) {
       if (kickUserRoomId == null) {
-        alert("请输入指定麦位id");
+        this.$message("请输入指定麦位id");
       } else {
-        RCVoiceRoomLib.kickUserFromRoom(kickUserRoomId);
+        await this.$RCVoiceRoomLib.kickUserFromRoom(kickUserRoomId);
+        this.getLatestSeatInfo();
       }
     },
-    muteSeat: function (muteSeatIndex, ismute) {
+    muteSeat: async function (muteSeatIndex, ismute) {
       if (muteSeatIndex == null) {
-        alert("麦位序号");
+        this.$message("麦位序号");
       } else {
-        RCVoiceRoomLib.muteSeat(muteSeatIndex, ismute);
+        await this.$RCVoiceRoomLib.muteSeat(muteSeatIndex, ismute);
+        this.getLatestSeatInfo();
       }
     },
-    lockSeat: function (lockSeatIndex, isLocked) {
+    lockSeat: async function (lockSeatIndex, isLocked) {
       if (lockSeatIndex == null) {
-        alert("麦位序号");
+        this.$message("麦位序号");
       } else {
-        RCVoiceRoomLib.lockSeat(lockSeatIndex, isLocked);
+        await this.$RCVoiceRoomLib.lockSeat(lockSeatIndex, isLocked);
+        this.getLatestSeatInfo();
       }
     },
-    setRoomInfo: function (
-      seatCountValue,
-      isFreeEnterSeatValue
-    ) {
-      console.log(RCVoiceRoomLib.roomInfo);
+    setRoomInfo: async function (seatCountValue, isFreeEnterSeatValue) {
+      console.log(this.$RCVoiceRoomLib.roomInfo);
       const roominfo = {
         isFreeEnterSeat: isFreeEnterSeatValue,
-        isLockAll: RCVoiceRoomLib.roomInfo['isLockAll'],
-        isMuteAll: RCVoiceRoomLib.roomInfo['isMuteAll'],
-        roomName: RCVoiceRoomLib.roomInfo['roomName']||'1234',
+        isLockAll: this.$RCVoiceRoomLib.roomInfo["isLockAll"],
+        isMuteAll: this.$RCVoiceRoomLib.roomInfo["isMuteAll"],
+        roomName: this.$RCVoiceRoomLib.roomInfo["roomName"] || this.roomid,
         seatCount: seatCountValue, //麦位数量
       };
-      
+
       if (seatCountValue == null) {
-        alert("麦位序号");
+        this.$message("麦位序号");
       } else {
         console.log(roominfo);
-        RCVoiceRoomLib.setRoomInfo(roominfo);
+        await this.$RCVoiceRoomLib.setRoomInfo(roominfo);
+        this.getLatestSeatInfo();
       }
     },
-    muteOtherSeats: function (muteOtherValue) {
-      RCVoiceRoomLib.muteOtherSeats(muteOtherValue);
+    muteOtherSeats: async function (muteOtherValue) {
+      await this.$RCVoiceRoomLib.muteOtherSeats(muteOtherValue);
+      this.getLatestSeatInfo();
     },
-    lockOtherSeats: function (lockOtherValue) {
-      RCVoiceRoomLib.lockOtherSeats(lockOtherValue);
+    lockOtherSeats: async function (lockOtherValue) {
+      await this.$RCVoiceRoomLib.lockOtherSeats(lockOtherValue);
+      this.getLatestSeatInfo();
     },
-    acceptRequestSeat: function (acceptRequestSeatId) {
+    acceptRequestSeat: async function (acceptRequestSeatId) {
       if (acceptRequestSeatId == null) {
-        alert("请输入同意用户id");
+        this.$message("请输入同意用户id");
       } else {
-        RCVoiceRoomLib.acceptRequestSeat(acceptRequestSeatId);
+        await this.$RCVoiceRoomLib.acceptRequestSeat(acceptRequestSeatId);
+        this.getLatestSeatInfo();
       }
     },
-    rejectRequestSeat: function (rejectRequestSeatId) {
+    rejectRequestSeat: async function (rejectRequestSeatId) {
       if (rejectRequestSeatId == null) {
-        alert("请输入拒绝用户id");
+        this.$message("请输入拒绝用户id");
       } else {
-        RCVoiceRoomLib.rejectRequestSeat(rejectRequestSeatId);
+        await this.$RCVoiceRoomLib.rejectRequestSeat(rejectRequestSeatId);
+        this.getLatestSeatInfo();
       }
+    },
+    muteAllRemoteStreams: async function (muteOtherAll) {
+      await this.$RCVoiceRoomLib.muteAllRemoteStreams(muteOtherAll);
+      this.getLatestSeatInfo();
+    },
+    disableAudioRecording: async function (isDisable) {
+      await this.$RCVoiceRoomLib.disableAudioRecording(isDisable);
+      this.getLatestSeatInfo();
     },
     //观众
-    enterSeat: function (enterseatIndex) {
+    enterSeat: async function (enterseatIndex) {
       if (enterseatIndex == null) {
-        alert("请输入麦位序号");
+        this.$message("请输入麦位序号");
       } else {
-        RCVoiceRoomLib.enterSeat(Number(enterseatIndex));
+        await this.$RCVoiceRoomLib.enterSeat(Number(enterseatIndex));
+        this.getLatestSeatInfo();
       }
     },
-    leaveSeat: function () {
-      RCVoiceRoomLib.leaveSeat();
+    leaveSeat: async function () {
+      await this.$RCVoiceRoomLib.leaveSeat();
+      this.getLatestSeatInfo();
     },
-    switchSeatTo: function (switchseatIndex) {
+    switchSeatTo: async function (switchseatIndex) {
       if (switchseatIndex == null) {
-        alert("请输入麦位序号");
+        this.$message("请输入麦位序号");
       } else {
-        RCVoiceRoomLib.switchSeatTo(switchseatIndex);
+        await this.$RCVoiceRoomLib.switchSeatTo(switchseatIndex);
+        this.getLatestSeatInfo();
       }
-    },
-    disConnect: function () {
-      RCVoiceRoomLib.disConnect();
     },
     getRequestSeatUserIds: async function () {
-      this.RequestSeatUserIds = await RCVoiceRoomLib.getRequestSeatUserIds();
+      this.RequestSeatUserIds =
+        await this.$RCVoiceRoomLib.getRequestSeatUserIds();
     },
-    updateSeatInfo: function (updateSeatIndex, updateExtra) {
+    updateSeatInfo: async function (updateSeatIndex, updateExtra) {
       if (updateSeatIndex == null) {
-        alert("请输入麦位序号");
+        this.$message("请输入麦位序号");
       } else {
-        RCVoiceRoomLib.updateSeatInfo(updateSeatIndex, updateExtra);
+        await this.$RCVoiceRoomLib.updateSeatInfoExtra(
+          updateSeatIndex,
+          updateExtra
+        );
+        this.getLatestSeatInfo();
       }
     },
-    requestSeat: function () {
-      RCVoiceRoomLib.requestSeat();
+    requestSeat: async function () {
+      this.$RCVoiceRoomLib.requestSeat();
     },
-    cancelRequestSeat: function () {
-      RCVoiceRoomLib.cancelRequestSeat();
+    cancelRequestSeat: async function () {
+      this.$RCVoiceRoomLib.cancelRequestSeat();
     },
-   
-    sendMessage: function () {
-      const message = {
-        messageType: "RC:VRLRefreshMsg", // 'RC:TxtMsg'
-        content: { name: "RCUserOnSeatSpeakingKey_0", content: 1 },
-      };
-      RCVoiceRoomLib.sendMessage(message);
-      // const name = "RCAudienceLeaveRoom",
-      //   content = "265e3bf0-fafe-40f0-9521-63929501db78";
+    stopCreateTrack: async function () {
+      if (!this.music) {
+        this.$message("暂无 music");
+        return;
+      }
+      await this.$RCVoiceRoomLib.stopCreateTrack();
+    },
 
-      // RCVoiceRoomLib.notifyVoiceRoom(name, content);
+    handleFileChange: function (e) {
+      this.music = e.target.files[0];
     },
+
+    play: async function () {
+      if (!this.music) {
+        this.$message("请选择 music");
+        return;
+      }
+      await this.$RCVoiceRoomLib.createTrack(this.music);
+    },
+  },
+  mounted() {
+    this.$RCVoiceRoomLib.on("ready", () => {
+      // console.log("this.$RCVoiceRoomLib初始化完成");
+    });
+    this.$RCVoiceRoomLib.on("seatInfoDidUpdate", () => {
+      console.log("seatInfoDidUpdate");
+      this._data.seatInfoList = this.$RCVoiceRoomLib.seatInfoList;
+      this.$forceUpdate();
+    });
+    this.$RCVoiceRoomLib.on("roomInfoDidUpdate", () => {
+      console.log("RoomInfo:", this.$RCVoiceRoomLib.roomInfo);
+      this._data.roomInfo = this.$RCVoiceRoomLib.roomInfo;
+      this.$forceUpdate();
+    });
+
+    //被邀请上麦
+    this.$RCVoiceRoomLib.on("RCPickerUserSeatContent", (info) => {
+      if (info.targetId == this.$RCVoiceRoomLib.im.userId) {
+        this.$confirm(
+          `您被${info.sendUserId} 邀请上麦，是否同意？`,
+          "是否同意上麦",
+          {
+            confirmButtonText: "同意",
+            cancelButtonText: "拒绝",
+            showClose: false,
+          }
+        )
+          .then(async () => {
+            try {
+              const fintSeat = await this.$RCVoiceRoomLib.findSeat();
+              await this.$RCVoiceRoomLib.enterSeat(fintSeat);
+              await this.$RCVoiceRoomLib.notifyVoiceRoom(
+                "VoiceRoomAgreeManagePick",
+                {
+                  content: info.targetId,
+                  name: "VoiceRoomAgreeManagePick",
+                  totalMemberCount: 0,
+                }
+              );
+              this.getLatestSeatInfo();
+            } catch (error) {
+              console.log(error);
+            }
+          })
+          .catch(async () => {
+            await this.$RCVoiceRoomLib.notifyVoiceRoom(
+              "VoiceRoomRejectManagePick",
+              {
+                content: info.targetId,
+                name: "VoiceRoomRejectManagePick",
+                totalMemberCount: 0,
+              }
+            );
+          });
+      }
+    });
+
+    //收到同意邀请上麦消息
+    this.$RCVoiceRoomLib.on("VoiceRoomAgreeManagePick", () => {
+      this.$message("用户连线成功");
+      this.getLatestSeatInfo();
+    });
+
+    //收到拒绝邀请上麦消息
+    this.$RCVoiceRoomLib.on("VoiceRoomRejectManagePick", () => {
+      this.$message("用户拒绝邀请");
+    });
+
+    //被抱下麦
+    this.$RCVoiceRoomLib.on("KickSeatReceived", () => {
+      console.log(123);
+      this.$message("您已被抱下麦");
+      this.getLatestSeatInfo();
+    });
+
+    //被踢出房间
+    this.$RCVoiceRoomLib.on("RCKickUserOutRoomContent", async (parm) => {
+      if (parm.targetId == this.$RCVoiceRoomLib.im.userId) {
+        await this.$RCVoiceRoomLib
+          .leaveRoom(this.$RCVoiceRoomLib._roomidcli)
+          .then(() => {
+            this.$message("您已被踢出房间");
+            this.getLatestSeatInfo();
+          });
+      }
+    });
   },
 };
 </script>
@@ -460,22 +701,29 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  font-size: 14px;
 }
 /* .title {
   position: absolute;
   left: 30%;
 } */
 .block {
-  width: 30%;
+  width: 40%;
   float: left;
   text-align: left;
   margin-left: 20%;
 }
+.blockT {
+  width: 40%;
+  float: left;
+  text-align: left;
+}
+
 .inputID {
-  width: 300px;
+  width: 200px !important;
 }
 .inputOther {
-  width: 50px;
+  width: 50px !important;
 }
 .blockTitle {
   float: left;

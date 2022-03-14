@@ -1,9 +1,7 @@
-const  path  =  require('path')
 module.exports = {
-    publicPath:'/webchat/',
+    publicPath: '/voice_quickdemo',
     devServer: {
-        port: 8078,     // 端口号
-        disableHostCheck: true
+        port: 8080, // 端口号
+        disableHostCheck: true,
     },
-  
 };
