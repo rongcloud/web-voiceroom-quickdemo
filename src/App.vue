@@ -398,7 +398,18 @@ export default {
         this.$message("请填写appkey");
         return;
       }
-      this.$RCVoiceRoomLib.init({ AppKey: this._data.appkey });
+      // this.appkey
+      this.$RongIMLib.init({
+        appkey: this.appkey,
+      });
+      const rtcClient = this.$RongIMLib.installPlugin(
+        this.$RongRTCLib.installer,
+        {}
+      );
+      this.$RCVoiceRoomLib.init({
+        RongIMLib: this.$RongIMLib,
+        RongRTCLib: rtcClient,
+      });
     },
     openPlayer: async function () {
       this.$RCVoiceRoomLib.enableSpeaker();
@@ -411,7 +422,6 @@ export default {
       } else {
         this._data.seatInfoList = [];
       }
-      //  this._data.seatInfoList = this.$RCVoiceRoomLib.seatInfoLis
     },
     connect() {
       if (!this.usertoken) {
@@ -419,7 +429,7 @@ export default {
         return;
       }
 
-      this.$RCVoiceRoomLib.connect(this.usertoken);
+      this.$RongIMLib.connect(this.usertoken);
     },
     async createAndJoinRoom() {
       if (this._data.roomid == "") {
@@ -673,7 +683,6 @@ export default {
 
     //被抱下麦
     this.$RCVoiceRoomLib.on("KickSeatReceived", () => {
-      console.log(123);
       this.$message("您已被抱下麦");
       this.getLatestSeatInfo();
     });
@@ -681,12 +690,14 @@ export default {
     //被踢出房间
     this.$RCVoiceRoomLib.on("RCKickUserOutRoomContent", async (parm) => {
       if (parm.targetId == this.$RCVoiceRoomLib.im.userId) {
-        await this.$RCVoiceRoomLib
-          .leaveRoom(this.$RCVoiceRoomLib._roomidcli)
-          .then(() => {
-            this.$message("您已被踢出房间");
-            this.getLatestSeatInfo();
-          });
+        this.$message("您已被踢出房间");
+        this.getLatestSeatInfo();
+        // await this.$RCVoiceRoomLib
+        //   .leaveRoom(this.$RCVoiceRoomLib._roomidcli)
+        //   .then(() => {
+        //     this.$message("您已被踢出房间");
+        //     this.getLatestSeatInfo();
+        //   });
       }
     });
   },
@@ -703,10 +714,6 @@ export default {
   margin-top: 60px;
   font-size: 14px;
 }
-/* .title {
-  position: absolute;
-  left: 30%;
-} */
 .block {
   width: 40%;
   float: left;
