@@ -2,7 +2,7 @@
 
 ## 线上演示 
 
-[ 语聊房quickdemo演示 ](https://apiv1-rcrtc.rongcloud.cn/webchat)
+[ 语聊房 demo 演示 ](https://apiv1-rcrtc.rongcloud.cn/voice/#/login)
 
 ## 项目安装
 ```
@@ -21,7 +21,7 @@ npm run serve
 本项目所有远端服务完全由融云im及rtc服务提供，用户无需搭建服务端即可体验sdk提供的全部客户端功能。
 如果需要服务端能力及ui搭建需要用户自行开发。
 
-[ sdk详细文档地址 ](https://doc.rongcloud.cn/voiceroom/Web/1.X/intro/intro)
+[ sdk详细文档地址 ](https://doc.rongcloud.cn/voiceroom/Web/2.X/overview)
 
 ### 项目运行
 
@@ -68,10 +68,10 @@ joinRoom 按钮：根据房间id 加入一个已经存在的房间 必须且只�
 |  停止播放  |     停止播放已播放 MP3 文件            |
 |  取消排麦  |     当前用户离开申请上麦队列            |
 |  申请上麦集合  |        当前申请上麦的用户队列         |
-| 最新麦位信息   |    点击后会展示语聊房当前的最新麦位信息。详细数据模型请参考[ sdk详细文档地址 ](https://doc.rongcloud.cn/voiceroom/Web/1.X/intro/intro)             |
+| 最新麦位信息   |    点击后会展示语聊房当前的最新麦位信息。详细数据模型请参考[ sdk详细文档地址 ](https://doc.rongcloud.cn/voiceroom/Web/2.X/overview)             |
 
 
-> 用户如果需要使用融云im提供的其他能力可以再加入房间后访问 RCVoiceRoomLib.im.chatRoom 该对象为当前im聊天室实例 详细文档参考[ 融云im详细文档地址 ](https://doc.rongcloud.cn/im/Web/4.X/index)
+> 用户如果需要使用融云im提供的其他能力可以再加入房间后访问 RCVoiceRoomLib.im.chatRoom 该对象为当前im聊天室实例 详细文档参考[ 融云im详细文档地址 ](https://doc.rongcloud.cn/im/Web/5.X/prepare)
 
 
 
